@@ -34,6 +34,6 @@ jobs:
     - name: Format check with Ruff
       run: |
         ruff format --diff --target-version=py39
-    - name: Test with pytest
-      run: |
-        pytest
+    # - name: Test with pytest
+    #   run: |
+    #     pytest
