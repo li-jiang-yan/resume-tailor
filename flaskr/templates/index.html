@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+  <title>Resume Tailor</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+    crossorigin="anonymous">
+</head>
+<body>
+  <div class="container my-3">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="mb-3">
+            <label for="jobDetails">
+              Job Description
+            </label>
+            <textarea
+              class="form-control"
+              id="jobDetails">
+            </textarea>
+          </div>
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="jobAnalysisButton">
+            Analyse
+          </button>
+          <div
+            class="mb-3"
+            id="jobAnalysisOutput">
+          </div>
+        </div>
+        <div class="col">
+          <label
+            for="jsonUploadFile"
+            class="form-label">
+            Resume
+          </label>
+          <div class="input-group mb-3">
+            <input
+              type="file"
+              id="jsonUploadFile"
+              class="form-control">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              id="jsonUploadButton">
+              Upload JSON
+            </button>
+          </div>
+          <div
+            class="mb-3"
+            id="resumeEditDiv">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous">
+  </script>
+</body>
+</html>
