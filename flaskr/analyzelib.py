@@ -236,7 +236,9 @@ NGRAM_MAX = 2
 def vectorize(text):
     """Vectorizes the given text using sklearn's CountVectorizer."""
     corpus = [text]
-    vectorizer = CountVectorizer(ngram_range=(1, NGRAM_MAX), token_pattern=r"\b\w+\b", min_df=1)
+    vectorizer = CountVectorizer(
+        ngram_range=(1, NGRAM_MAX), token_pattern=r"\b\w+\b", min_df=1
+    )
     X = vectorizer.fit_transform(corpus)
     labels, values = rank_terms(vectorizer, X)
     return labels, values
@@ -270,4 +272,3 @@ def ignored_tokens(ngram_max=NGRAM_MAX):
             phrases = {f"{phrase} {word}" for phrase in phrases for word in words}
         result.update(phrases)
     return result
-
