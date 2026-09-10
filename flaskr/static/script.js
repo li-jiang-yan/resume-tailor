@@ -12,10 +12,18 @@ const jsonUploadElement = {
   output: document.getElementById('jsonUploadOutput')
 };
 
+const summaryElement = {
+  textarea: document.getElementById('summaryTextarea'),
+  button: document.getElementById('summaryButton'),
+  output: document.getElementById('summaryOutput')
+}
+
 // Increase the height of the text area for a longer input
-jobAnalysisElement.textarea.addEventListener('input', (event) => {
-  event.currentTarget.style.height = 'auto';
-  event.currentTarget.style.height = event.currentTarget.scrollHeight + 'px';
+document.addEventListener('input', (event) => {
+  if (event.target.matches('textarea')) {
+    event.target.style.height = 'auto';
+    event.target.style.height = event.target.scrollHeight + 'px';
+  }
 });
 
 // Perform analysis on the job description given
@@ -60,3 +68,25 @@ jobAnalysisElement.button.addEventListener('click', async () => {
   });
 
 });
+
+// Perform similarity computation on summary and job description given
+summaryElement.button.addEventListener('click', async () => {
+  // Compute similarity in backend
+  const response = await fetch('/similarity', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      corpus: [
+        jobAnalysisElement.textarea.value,
+        summaryElement.textarea.value
+      ]
+    })
+  });
+
+  const data = await response.json();
+
+  // Present similarity in frontend
+  summaryElement.output.replaceChildren(`Similarity = ${data.percentage.toFixed(1)}%`);
+})
