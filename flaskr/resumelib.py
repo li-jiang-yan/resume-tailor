@@ -7,5 +7,4 @@ def compute_similarity(corpus):
     vectorizer = TfidfVectorizer()
     X = vectorizer.fit_transform(corpus)
     similarity = cosine_similarity(X[0:1], X[1:2]).item()
-    print(similarity)
     return similarity
