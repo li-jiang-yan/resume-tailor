@@ -7,7 +7,9 @@ import {
   CheckboxTextarea,
   Div,
   InlineField,
-  Label
+  Label,
+  NestedSortableDiv,
+  SortableAccordionItem
 } from "./components.js";
 
 
@@ -154,7 +156,7 @@ function renderHeader(headerObject) {
 
 // Function for rendering sections
 function renderSections(sectionObjectArray) {
-  return AccordionItem(
+  return SortableAccordionItem(
     'sectionCollapse',  // collapseId
     'Sections',         // btnText
     ...sectionObjectArray.map(renderSection)
@@ -189,7 +191,7 @@ function renderSection(sectionObject) {
 
 // Function for rendering comma separated values
 function renderCSV(csvArray, sectionId, inputType) {
-  return Div(
+  return NestedSortableDiv(
     ...csvArray.map((value, index) => {
       const valueId = `${sectionId}${String(index).padStart(2, '0')}`;
       return CheckboxInput(valueId, inputType, value);
@@ -200,7 +202,7 @@ function renderCSV(csvArray, sectionId, inputType) {
 
 // Function for rendering entries
 function renderEntries(entryArray, sectionId) {
-  return Div(
+  return NestedSortableDiv(
     ...entryArray.map((entry, index) => {
       const entryId = `${sectionId}${String(index).padStart(2, '0')}`;
       return renderEntry(entryId, entry);
@@ -240,7 +242,7 @@ function renderEntryField(entryId, key, value) {
 
 // Function for rendering bulletlists
 function renderBulletlist(entryFieldId, sourceArray) {
-  return Div(
+  return NestedSortableDiv(
     Label('Bulletpoints'),
     ...sourceArray.map((item, index) => {
       const idPrefix = `${entryFieldId}${String(index).padStart(2, '0')}`;

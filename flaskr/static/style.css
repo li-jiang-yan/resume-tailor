@@ -1,0 +1,7 @@
+.invisible {
+  visibility: hidden;
+}
+
+.opaque {
+  opacity: 1.0;
+}
