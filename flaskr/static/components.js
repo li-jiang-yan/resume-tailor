@@ -183,3 +183,49 @@ export function Div(...children) {
 export function Label(labelContent) {
   return render(`<label class="col-form-label">${labelContent}</label>`);
 }
+
+
+export function SortableAccordionItem(collapseId, btnText, ...bodyChildren) {
+  const result = render('<div class="accordion-item"></div>');
+  result.replaceChildren(
+    AccordionHeader(collapseId, btnText),
+    SortableAccordionCollapse(collapseId, ...bodyChildren)
+  );
+  return result;
+}
+
+
+function SortableAccordionCollapse(id, ...bodyChildren) {
+  const result = render(`<div class="accordion-collapse collapse" id="${id}"></div>`);
+  result.replaceChildren(SortableAccordionBody(...bodyChildren));
+  return result;
+}
+
+
+function SortableAccordionBody(...children) {
+  const result = AccordionBody(...children);
+
+  // Make accordion body sortable
+  Sortable.create(result, {
+    forceFallback: true,
+    dragClass: 'opaque',
+    ghostClass: 'invisible'
+  });
+
+  return result;
+}
+
+export function NestedSortableDiv(...children) {
+  const result = Div(...children);
+
+  // Make Div sortable (nested)
+  Sortable.create(result, {
+    group: 'nested',
+    fallbackOnBody: true,
+    forceFallback: true,
+    dragClass: 'opaque',
+    ghostClass: 'invisible'
+  });
+
+  return result;
+}
