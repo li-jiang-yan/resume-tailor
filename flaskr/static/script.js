@@ -2,14 +2,19 @@ import {
   Accordion,
   AccordionItem,
   Canvas,
-  CheckboxAccordion,
-  CheckboxInput,
-  CheckboxTextarea,
-  Div,
+  Card,
+  CardTitle,
   InlineField,
   Label,
   NestedSortableDiv,
-  SortableAccordionItem
+  PrimaryButton,
+  SortableAccordionItem,
+  Section,
+  Entry,
+  Bulletlist,
+  Bulletpoint,
+  CommaSeparatedList,
+  CommaSeparatedValue,
 } from "./components.js";
 
 
@@ -30,6 +35,13 @@ const summaryElement = {
   textarea: document.getElementById('summaryTextarea'),
   button: document.getElementById('summaryButton'),
   output: document.getElementById('summaryOutput')
+}
+
+// Parent elements in resume editor
+const editorElement = {
+  download: null,
+  header: null,
+  sections: null
 }
 
 
@@ -128,16 +140,177 @@ jsonUploadElement.button.addEventListener('click', async () => {
   try {
     const fileText = await file.text();
     const fileObject = JSON.parse(fileText);
+
+    // Define editor elements to be used later
+    editorElement.download = renderDownloadCard();
+    editorElement.header = renderHeader(fileObject.document.header);
+    editorElement.sections = renderSections(fileObject.document.sections);
+
+    // Add all elements to output of JSON upload
     jsonUploadElement.output.replaceChildren(
+      editorElement.download,
       Accordion(
-        renderHeader(fileObject.document.header),
-        renderSections(fileObject.document.sections)
+        editorElement.header,
+        editorElement.sections
       )
     );
   } catch (error) {
     console.error('Error reading file:', error);
   }
 });
+
+
+// Function for render download card
+function renderDownloadCard() {
+  const downloadButtons = {
+    master: PrimaryButton('Master'),
+    json: PrimaryButton('JSON')
+  };
+
+  addDownloadEventListeners(downloadButtons);
+
+  return Card(
+    CardTitle('div', 'Download'),
+    ...Object.values(downloadButtons)
+  );
+}
+
+
+// Function to add download event listeners
+function addDownloadEventListeners(downloadButtons) {
+  downloadButtons.master.addEventListener('click', () => {
+    downloadJSON(createObject(true));
+  });
+  downloadButtons.json.addEventListener('click', () => {
+    downloadJSON(createObject(false));
+  });
+}
+
+
+// Function to download a given JSON file
+function downloadJSON(jsonObject) {
+  const blob = new Blob(
+    [ JSON.stringify(jsonObject, null, 2) ],
+    { type: 'application/json' }
+  );
+  const url = URL.createObjectURL(blob);
+
+  // Create an anchor element and click it
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'resume.json';
+  link.click();
+
+  URL.revokeObjectURL(url);
+}
+
+
+// Function for taking all elements on page to create object
+function createObject(all=true) {
+  const header = editorElement.header;
+  const sections = editorElement.sections;
+
+  return {
+    ...parseChildren(header, all),
+    ...parseSections(sections, all)
+  };
+}
+
+
+function parseChildren(parentElement, all) {
+  return Object.fromEntries(
+    Array.from([
+      ...parentElement.querySelectorAll('.inline-field'),
+      ...parentElement.querySelectorAll('.bulletlist')
+    ]).map(
+      (inputElement) => parseElement(inputElement, all)
+    )
+  );
+}
+
+
+// Function for parsing input elements
+function parseElement(inputElement, all) {
+  if (inputElement.classList.contains('inline-field')) {
+    const key = convertToKey(inputElement.querySelectorAll('label')[0].innerText);
+    const value = inputElement.querySelectorAll('input')[0].value;
+    return [key, value];
+  } else if (inputElement.classList.contains('bulletlist')) {
+    const key = 'bulletlist';
+    const value = Array.from(inputElement.querySelectorAll('.bulletpoint')).filter(
+      (bulletpointElement) => all ? true : isChecked(bulletpointElement)
+    ).map(parseBulletpoint);
+    return [key, value];
+  } else {
+    return null;
+  }
+}
+
+
+// Function for checking if bulletpoint/comma separated value is checked
+function isChecked(rowElement) {
+  return rowElement.querySelectorAll('.checkbox')[0].checked;
+}
+
+
+// Function for parsing sections
+function parseSections(sectionsElement, all) {
+  return {
+    sections: Array.from(sectionsElement.querySelectorAll('.section')).filter(
+      (sectionElement) => all ? true : isChecked(sectionElement)
+    ).map(
+      (sectionElement) => parseSection(sectionElement, all)
+    )
+  };
+}
+
+
+// Function for parsing a given section
+function parseSection(sectionElement, all) {
+  const result = {};
+  const sectionTitle = sectionElement.querySelectorAll('.section-title')[0];
+  result.title = sectionTitle.querySelectorAll('input')[0].value;
+
+  const entries = Array.from(sectionElement.querySelectorAll('.entry')).filter(
+    (entryElement) => all ? true : isChecked(entryElement)
+  ).map(
+    (entryElement) => parseEntry(entryElement, all)
+  );
+  if (entries.length !== 0) result.entries = entries;
+
+  const cslist = Array.from(sectionElement.querySelectorAll('.csv')).filter(
+    (csvElement) => all ? true : isChecked(csvElement)
+  ).map(
+    (csvElement) => parseCsv(csvElement)
+  );
+  if (cslist.length !== 0) result.cslist = cslist;
+
+  return result;
+}
+
+
+// Function for parsing a section entry
+function parseEntry(entryElement, all) {
+  return parseChildren(entryElement, all);
+}
+
+
+// Function for parsing a bulletpoint
+function parseBulletpoint(bulletpointElement) {
+  return bulletpointElement.querySelectorAll('textarea')[0].value;
+}
+
+
+// Function for parsing a comma separated value
+function parseCsv(csvElement) {
+  return csvElement.querySelectorAll('.input-text')[0].value;
+}
+
+
+// Function for trimming strings and converting them to lowercase
+function convertToKey(str) {
+  return str.trim().toLowerCase();
+}
 
 
 // Function for rendering headers
@@ -181,7 +354,7 @@ function renderSection(sectionObject) {
     )
   }
 
-  return CheckboxAccordion(
+  return Section(
     sectionObject.type,       // idPrefix
     sectionObject.title,      // accordionBtnText
     sectionContent            // accordionBodyChildren
@@ -191,10 +364,11 @@ function renderSection(sectionObject) {
 
 // Function for rendering comma separated values
 function renderCSV(csvArray, sectionId, inputType) {
-  return NestedSortableDiv(
+  return CommaSeparatedList(
+    Label('List'),
     ...csvArray.map((value, index) => {
       const valueId = `${sectionId}${String(index).padStart(2, '0')}`;
-      return CheckboxInput(valueId, inputType, value);
+      return CommaSeparatedValue(valueId, inputType, value);
     })
   );
 }
@@ -213,7 +387,7 @@ function renderEntries(entryArray, sectionId) {
 
 // Function for rendering a single entry
 function renderEntry(entryId, entryObject) {
-  return CheckboxAccordion(
+  return Entry(
     entryId,          // idPrefix
     entryObject.name, // accordionBtnText
     ...renderEntryFields(entryId, entryObject)
@@ -242,11 +416,11 @@ function renderEntryField(entryId, key, value) {
 
 // Function for rendering bulletlists
 function renderBulletlist(entryFieldId, sourceArray) {
-  return NestedSortableDiv(
-    Label('Bulletpoints'),
+  return Bulletlist(
+    Label('Bulletlist'),
     ...sourceArray.map((item, index) => {
       const idPrefix = `${entryFieldId}${String(index).padStart(2, '0')}`;
-      return CheckboxTextarea(idPrefix, item);
+      return Bulletpoint(idPrefix, item);
     })
   );
 }

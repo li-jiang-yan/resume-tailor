@@ -56,14 +56,14 @@ function AccordionBody(...children) {
 }
 
 
-export function InlineField(id, labelContent, inputType, value) {
+export function InlineField(id, labelText, inputType, value) {
   return render(`
-    <div class="row mb-3">
+    <div class="row mb-3 inline-field">
       <div class="col-sm-2">
         <label
           for="${id}"
           class="col-form-label">
-          ${labelContent}
+          ${labelText}
         </label>
       </div>
       <div class="col-sm-10">
@@ -71,6 +71,26 @@ export function InlineField(id, labelContent, inputType, value) {
           type="${inputType}"
           class="form-control"
           id="${id}"
+          value="${value}">
+      </div>
+    </div>
+  `);
+}
+
+
+function SectionTitle(value) {
+  return render(`
+    <div class="row mb-3 section-title">
+      <div class="col-sm-2">
+        <label
+          class="col-form-label">
+          Title
+        </label>
+      </div>
+      <div class="col-sm-10">
+        <input
+          type="text"
+          class="form-control"
           value="${value}">
       </div>
     </div>
@@ -102,10 +122,25 @@ export function CheckboxAccordion(idPrefix, accordionBtnText, ...accordionBodyCh
 }
 
 
+export function Section(idPrefix, accordionBtnText, ...accordionBodyChildren) {
+  const result = CheckboxAccordion(idPrefix, accordionBtnText, SectionTitle(accordionBtnText), ...accordionBodyChildren);
+  result.classList.add('section');
+  return result;
+}
+
+
+export function Entry(idPrefix, accordionBtnText, ...accordionBodyChildren) {
+  const result = CheckboxAccordion(idPrefix, accordionBtnText, ...accordionBodyChildren);
+  result.classList.add('entry');
+  return result;
+}
+
+
 function Checkbox(id) {
   return render(`
     <input
       type="checkbox"
+      class="checkbox"
       id="${id}"
       name="${id}"
       checked>
@@ -124,9 +159,20 @@ export function CheckboxInput(idPrefix, inputType, value) {
   const input = Input(inputType, inputId, value);
   input.classList.add('col');
 
-  // Result
-  const result = render('<div class="row"></div>');
-  result.replaceChildren(checkbox, input);
+  // Row Div
+  const rowDiv = render('<div class="row"></div>');
+  rowDiv.replaceChildren(checkbox, input);
+
+  // Result (Container Div)
+  const result = render('<div class="container"></div>');
+  result.replaceChildren(rowDiv);
+  return result;
+}
+
+
+export function CommaSeparatedValue(idPrefix, inputType, value) {
+  const result = CheckboxInput(idPrefix, inputType, value);
+  result.classList.add('csv');
   return result;
 }
 
@@ -135,7 +181,7 @@ function Input(inputType, id, value) {
   return render(`
     <input
       type="${inputType}"
-      class="form-control"
+      class="form-control input-${inputType}"
       id="${id}"
       value="${value}">
   `);
@@ -160,6 +206,13 @@ export function CheckboxTextarea(idPrefix, value) {
   // Result (Container Div)
   const result = render('<div class="container"></div>');
   result.replaceChildren(rowDiv);
+  return result;
+}
+
+
+export function Bulletpoint(idPrefix, value) {
+  const result = CheckboxTextarea(idPrefix, value);
+  result.classList.add('bulletpoint');
   return result;
 }
 
@@ -228,4 +281,42 @@ export function NestedSortableDiv(...children) {
   });
 
   return result;
+}
+
+export function CommaSeparatedList(...children) {
+  const result = NestedSortableDiv(...children);
+  result.classList.add('cslist');
+  return result;
+}
+
+
+export function Bulletlist(...children) {
+  const result = NestedSortableDiv(...children);
+  result.classList.add('bulletlist');
+  return result;
+}
+
+
+export function PrimaryButton(text) {
+  return render(`
+    <button
+      type="button"
+      class="btn btn-primary me-3">
+      ${text}
+    </button>
+  `);
+}
+
+
+export function Card(...elements) {
+  const result = render('<div class="card"></div>');
+  const body = render('<div class="card-body"></div>');
+  body.replaceChildren(...elements);
+  result.replaceChildren(body);
+  return result;
+}
+
+
+export function CardTitle(localName, text) {
+  return render(`<${localName} class="card-title">${text}</${localName}>`);
 }
