@@ -1,21 +1,20 @@
-import {
-  Accordion,
-  AccordionItem,
-  Canvas,
-  Card,
-  CardTitle,
-  InlineField,
-  Label,
-  NestedSortableDiv,
-  PrimaryButton,
-  SortableAccordionItem,
-  Section,
-  Entry,
-  Bulletlist,
-  Bulletpoint,
-  CommaSeparatedList,
-  CommaSeparatedValue,
-} from "./components.js";
+import { Accordion } from "./components/Accordion.js";
+import { AccordionItem } from "./components/AccordionItem.js";
+import { Bulletlist } from "./components/Bulletlist.js";
+import { Bulletpoint } from "./components/Bulletpoint.js";
+import { Canvas } from "./components/Canvas.js";
+import { Card } from "./components/Card.js"
+import { CardTitle } from "./components/CardTitle.js";
+import { CommaSeparatedList } from "./components/CommaSeparatedList.js";
+import { CommaSeparatedValue } from "./components/CommaSeparatedValue.js";
+import { Entry } from "./components/Entry.js";
+import { InlineField } from "./components/InlineField.js";
+import { Label } from "./components/Label.js";
+import { NestedSortableDiv } from "./components/NestedSortableDiv.js";
+import { PrimaryButton } from "./components/PrimaryButton.js";
+import { Section } from "./components/Section.js";
+import { SortableAccordionItem } from "./components/SortableAccordionItem.js";
+import { Spinner } from "./components/Spinner.js";
 
 
 // Existing elements in index.html
@@ -62,6 +61,8 @@ function resizeTextarea(textarea) {
 
 // Perform analysis on the job description given
 jobAnalysisElement.button.addEventListener('click', async () => {
+  jobAnalysisElement.output.replaceChildren(Spinner());
+
   // Analyze job description in backend
   const response = await fetch('/analyze', {
     method: 'POST',
@@ -76,7 +77,7 @@ jobAnalysisElement.button.addEventListener('click', async () => {
   const data = await response.json();
 
   // Output chart with analysis in frontend
-  const canvas = Canvas('jobAnalysisCanvas');
+  const canvas = Canvas();
   jobAnalysisElement.output.replaceChildren(
     "Frequently repeated words/phrases used",
     canvas
@@ -106,6 +107,8 @@ jobAnalysisElement.button.addEventListener('click', async () => {
 
 // Perform similarity computation on summary and job description given
 summaryElement.button.addEventListener('click', async () => {
+  summaryElement.output.replaceChildren(Spinner());
+
   // Compute similarity in backend
   const response = await fetch('/similarity', {
     method: 'POST',
@@ -316,13 +319,12 @@ function convertToKey(str) {
 // Function for rendering headers
 function renderHeader(headerObject) {
   return AccordionItem(
-    'headerCollapse', // collapseId
-    'Header',         // btnText
-    InlineField('resumeHeaderName', 'Name', 'text', headerObject.name),
-    InlineField('resumeHeaderEmail', 'Email', 'email', headerObject.contact.email),
-    InlineField('resumeHeaderMobile', 'Mobile', 'tel', headerObject.contact.mobile),
-    InlineField('resumeHeaderPortfolio', 'Portfolio', 'url', headerObject.links.portfolio),
-    InlineField('resumeHeaderLinkedIn', 'LinkedIn', 'url', headerObject.links.linkedin)
+    'Header', // btnText
+    InlineField('Name', 'text', headerObject.name),
+    InlineField('Email', 'email', headerObject.email),
+    InlineField('Mobile', 'tel', headerObject.mobile),
+    InlineField('Portfolio', 'url', headerObject.portfolio),
+    InlineField('LinkedIn', 'url', headerObject.linkedin)
   );
 }
 
@@ -341,21 +343,18 @@ function renderSections(sectionObjectArray) {
 function renderSection(sectionObject) {
   let sectionContent = 'lorem ipsum';
 
-  if (Object.hasOwn(sectionObject, 'csv')) {
+  if (Object.hasOwn(sectionObject, 'cslist')) {
     sectionContent = renderCSV(
-      sectionObject.csv,      // csvArray
-      sectionObject.type,     // idPrefix
+      sectionObject.cslist,   // csvArray
       'text'                  // inputType
     );
   } else if (Object.hasOwn(sectionObject, 'entries')) {
     sectionContent = renderEntries(
       sectionObject.entries,  // entryArray
-      sectionObject.type      // idPrefix
     )
   }
 
   return Section(
-    sectionObject.type,       // idPrefix
     sectionObject.title,      // accordionBtnText
     sectionContent            // accordionBodyChildren
   );
@@ -363,72 +362,55 @@ function renderSection(sectionObject) {
 
 
 // Function for rendering comma separated values
-function renderCSV(csvArray, sectionId, inputType) {
+function renderCSV(csvArray, inputType) {
   return CommaSeparatedList(
     Label('List'),
-    ...csvArray.map((value, index) => {
-      const valueId = `${sectionId}${String(index).padStart(2, '0')}`;
-      return CommaSeparatedValue(valueId, inputType, value);
-    })
+    ...csvArray.map((value) => CommaSeparatedValue(inputType, value))
   );
 }
 
 
 // Function for rendering entries
-function renderEntries(entryArray, sectionId) {
+function renderEntries(entryArray) {
   return NestedSortableDiv(
-    ...entryArray.map((entry, index) => {
-      const entryId = `${sectionId}${String(index).padStart(2, '0')}`;
-      return renderEntry(entryId, entry);
-    })
+    ...entryArray.map(renderEntry)
   );
 }
 
 
 // Function for rendering a single entry
-function renderEntry(entryId, entryObject) {
+function renderEntry(entryObject) {
   return Entry(
-    entryId,          // idPrefix
     entryObject.name, // accordionBtnText
-    ...renderEntryFields(entryId, entryObject)
+    ...renderEntryFields(entryObject)
   );
 }
 
 
 // Function for rendering entry fields
-function renderEntryFields(entryId, entryObject) {
+function renderEntryFields(entryObject) {
   return Object.entries(entryObject).map(
-    ([key, value]) => renderEntryField(entryId, key, value)
+    ([key, value]) => renderEntryField(key, value)
   );
 }
 
 
 // Function for rendering a single entry field
-function renderEntryField(entryId, key, value) {
-  const entryFieldId = formatId(entryId, key);
-  if (key === 'ul') {
-    return renderBulletlist(entryFieldId, value);
+function renderEntryField(key, value) {
+  if (key === 'bulletlist') {
+    return renderBulletlist(value);
   } else {
-    return InlineField(entryFieldId, titleCase(key), 'text', value);
+    return InlineField(titleCase(key), 'text', value);
   }
 }
 
 
 // Function for rendering bulletlists
-function renderBulletlist(entryFieldId, sourceArray) {
+function renderBulletlist(sourceArray) {
   return Bulletlist(
     Label('Bulletlist'),
-    ...sourceArray.map((item, index) => {
-      const idPrefix = `${entryFieldId}${String(index).padStart(2, '0')}`;
-      return Bulletpoint(idPrefix, item);
-    })
+    ...sourceArray.map(Bulletpoint)
   );
-}
-
-
-// Function for formatting an id based on prefix and suffix
-function formatId(idPrefix, idSuffix) {
-  return `${idPrefix}${titleCase(idSuffix)}`;
 }
 
 
