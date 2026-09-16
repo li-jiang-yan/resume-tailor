@@ -146,8 +146,8 @@ jsonUploadElement.button.addEventListener('click', async () => {
 
     // Define editor elements to be used later
     editorElement.download = renderDownloadCard();
-    editorElement.header = renderHeader(fileObject.document.header);
-    editorElement.sections = renderSections(fileObject.document.sections);
+    editorElement.header = renderHeader(fileObject.header);
+    editorElement.sections = renderSections(fileObject.sections);
 
     // Add all elements to output of JSON upload
     jsonUploadElement.output.replaceChildren(
@@ -214,8 +214,15 @@ function createObject(all=true) {
   const sections = editorElement.sections;
 
   return {
-    ...parseChildren(header, all),
+    ...parseHeader(header),
     ...parseSections(sections, all)
+  };
+}
+
+
+function parseHeader(header) {
+  return {
+    header: parseChildren(header, true)
   };
 }
 
