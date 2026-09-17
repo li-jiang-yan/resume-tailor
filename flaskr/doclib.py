@@ -15,6 +15,7 @@ def generate(resume_json):
     set_layout(document)
     set_defaults(document)
     add_header(document, resume_json["header"])
+    add_summary(document, resume_json["summary"])
     add_sections(document, resume_json["sections"])
 
     # Save document to files stream
@@ -72,6 +73,21 @@ def add_header(document, header):
     paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
     # Newline
+    add_newline(document)
+
+
+def add_summary(document, summary):
+    # Add section title
+    title = "Summary".upper()
+    paragraph = document.add_paragraph()
+    run = paragraph.add_run(title)
+    run.bold = True
+    run.font.size = Pt(12)
+
+    # Add section contents
+    paragraph = document.add_paragraph(summary)
+
+    # Add newline
     add_newline(document)
 
 
