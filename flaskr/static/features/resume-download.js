@@ -6,6 +6,7 @@ export function addDownloadEventListeners(downloadButtons) {
   downloadButtons.json.addEventListener('click', () => {
     downloadJSON(createObject(false));
   });
+  downloadButtons.word.addEventListener('click', downloadWord);
 }
 
 
@@ -21,6 +22,27 @@ function downloadJSON(jsonObject) {
   const link = document.createElement('a');
   link.href = url;
   link.download = 'resume.json';
+  link.click();
+
+  URL.revokeObjectURL(url);
+}
+
+
+async function downloadWord() {
+  const response = await fetch('/word', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(createObject(true))
+  });
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+
+  // Create an anchor element and click it
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'resume.docx';
   link.click();
 
   URL.revokeObjectURL(url);
@@ -118,6 +140,13 @@ function parseSection(sectionElement, all) {
     (csvElement) => parseCSV(csvElement)
   );
   if (cslist.length !== 0) result.cslist = cslist;
+
+  const certifications = Array.from(sectionElement.querySelectorAll('.certification')).filter(
+    (certificationElement) => all ? true : isChecked(certificationElement)
+  ).map(
+    (certificationElement) => parseEntry(certificationElement, all)
+  );
+  if (certifications.length !== 0) result.certifications = certifications;
 
   return result;
 }

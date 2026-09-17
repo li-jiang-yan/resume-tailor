@@ -1,6 +1,6 @@
-from flask import Blueprint, jsonify, render_template, request
+from flask import Blueprint, jsonify, render_template, request, send_file
 
-from . import analyzelib, similaritylib
+from . import analyzelib, doclib, similaritylib
 
 bp = Blueprint("blog", __name__)
 
@@ -27,3 +27,11 @@ def similarity():
     corpus = payload["corpus"]
     similarity = similaritylib.compute(corpus)
     return jsonify({"percentage": similarity * 100}), 200
+
+
+@bp.route("/word", methods=["POST"])
+def word():
+    """Returns a Word doc of the given resume JSON file."""
+    resume_json = request.get_json()
+    file = doclib.generate(resume_json)
+    return send_file(file, as_attachment=True, download_name="resume.docx")
