@@ -5,6 +5,7 @@ import { Bulletlist } from "../components/Bulletlist.js";
 import { Bulletpoint } from "../components/Bulletpoint.js";
 import { Card } from "../components/Card.js"
 import { CardTitle } from "../components/CardTitle.js";
+import { Certification } from "../components/Certification.js";
 import { CommaSeparatedList } from "../components/CommaSeparatedList.js";
 import { CommaSeparatedValue } from "../components/CommaSeparatedValue.js";
 import { Entry } from "../components/Entry.js";
@@ -59,7 +60,8 @@ export async function uploadJson() {
 function renderDownloadCard() {
   const downloadButtons = {
     master: PrimaryButton('Master'),
-    json: PrimaryButton('JSON')
+    json: PrimaryButton('JSON'),
+    word: PrimaryButton('Word')
   };
 
   addDownloadEventListeners(downloadButtons);
@@ -105,7 +107,11 @@ function renderSection(sectionObject) {
     );
   } else if (Object.hasOwn(sectionObject, 'entries')) {
     sectionContent = renderEntries(
-      sectionObject.entries,  // entryArray
+      sectionObject.entries   // entryArray
+    )
+  } else if (Object.hasOwn(sectionObject, 'certifications')) {
+    sectionContent = renderCertifications(
+      sectionObject.certifications
     )
   }
 
@@ -133,7 +139,7 @@ function renderEntries(entryArray) {
 
 function renderEntry(entryObject) {
   return Entry(
-    entryObject.name, // accordionBtnText
+    entryObject.name,  // accordionButtonText
     ...renderEntryFields(entryObject)
   );
 }
@@ -165,4 +171,19 @@ function renderBulletlist(sourceArray) {
 
 function titleCase(str) {
   return `${str.charAt(0).toUpperCase()}${str.slice(1)}`
+}
+
+
+function renderCertifications(certificationArray) {
+  return NestedSortableDiv(
+    ...certificationArray.map(renderCertification)
+  );
+}
+
+
+function renderCertification(certificationObject) {
+  return Certification(
+    certificationObject.name,  // accordionButtonText
+    ...renderEntryFields(certificationObject)
+  );
 }
