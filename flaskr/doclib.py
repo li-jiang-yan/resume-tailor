@@ -1,7 +1,7 @@
 from io import BytesIO
 
 from docx import Document
-from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT
+from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_LINE_SPACING, WD_TAB_ALIGNMENT
 from docx.shared import Inches, Pt
 
 
@@ -15,6 +15,7 @@ def generate(resume_json):
     set_layout(document)
     set_defaults(document)
     add_header(document, resume_json["header"])
+    add_summary(document, resume_json["summary"])
     add_sections(document, resume_json["sections"])
 
     # Save document to files stream
@@ -30,6 +31,7 @@ def set_defaults(document):
     style.font.name = "Calibri"
     style.font.size = Pt(11)
     style.paragraph_format.space_after = Pt(0)
+    style.paragraph_format.line_spacing = WD_LINE_SPACING.SINGLE
 
 
 def set_layout(document):
@@ -69,6 +71,24 @@ def add_header(document, header):
     # Portfolio and LinkedIn paragraph
     paragraph = document.add_paragraph(f"Portfolio: {portfolio}, LinkedIn: {linkedin}")
     paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    # Newline
+    add_newline(document)
+
+
+def add_summary(document, summary):
+    # Add section title
+    title = "Summary".upper()
+    paragraph = document.add_paragraph()
+    run = paragraph.add_run(title)
+    run.bold = True
+    run.font.size = Pt(12)
+
+    # Add section contents
+    paragraph = document.add_paragraph(summary)
+
+    # Add newline
+    add_newline(document)
 
 
 def add_sections(document, sections):

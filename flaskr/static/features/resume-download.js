@@ -51,10 +51,12 @@ async function downloadWord() {
 
 function createObject(all=true) {
   const header = document.getElementById('resumeHeader');
+  const summary = document.getElementById('summaryTextarea');
   const sections = document.getElementById('resumeSections');
 
   return {
     ...parseHeader(header),
+    ...parseSummary(summary),
     ...parseSections(sections, all)
   };
 }
@@ -108,6 +110,13 @@ function isChecked(rowElement) {
 
 function parseBulletpoint(bulletpointElement) {
   return bulletpointElement.querySelectorAll('textarea')[0].value;
+}
+
+
+function parseSummary(summaryElement) {
+  return {
+    summary: summaryElement.value
+  };
 }
 
 
