@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, render_template, request
 
-from . import analyzelib, resumelib
+from . import analyzelib, similaritylib
 
 bp = Blueprint("blog", __name__)
 
@@ -25,5 +25,5 @@ def similarity():
     """Computes the TF-IDF similarity of two texts in a given corpus list."""
     payload = request.get_json()
     corpus = payload["corpus"]
-    similarity = resumelib.compute_similarity(corpus)
+    similarity = similaritylib.compute(corpus)
     return jsonify({"percentage": similarity * 100}), 200
