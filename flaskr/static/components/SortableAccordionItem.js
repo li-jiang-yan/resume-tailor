@@ -3,7 +3,8 @@ import { AccordionBody } from "./AccordionBody.js";
 import { AccordionHeader } from "./AccordionHeader.js";
 
 
-export function SortableAccordionItem(collapseId, buttonText, ...bodyChildren) {
+export function SortableAccordionItem(buttonText, ...bodyChildren) {
+  const collapseId = crypto.randomUUID();
   const result = render('<div class="accordion-item"></div>');
   result.replaceChildren(
     AccordionHeader(collapseId, buttonText),
