@@ -34,7 +34,7 @@ async function downloadWord() {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(createObject(true))
+    body: JSON.stringify(createObject(false))
   });
   const blob = await response.blob();
   const url = URL.createObjectURL(blob);
