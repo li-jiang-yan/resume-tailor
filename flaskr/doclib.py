@@ -1,7 +1,7 @@
 from io import BytesIO
 
 from docx import Document
-from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT
+from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_LINE_SPACING, WD_TAB_ALIGNMENT
 from docx.shared import Inches, Pt
 
 
@@ -30,6 +30,7 @@ def set_defaults(document):
     style.font.name = "Calibri"
     style.font.size = Pt(11)
     style.paragraph_format.space_after = Pt(0)
+    style.paragraph_format.line_spacing = WD_LINE_SPACING.SINGLE
 
 
 def set_layout(document):
@@ -69,6 +70,9 @@ def add_header(document, header):
     # Portfolio and LinkedIn paragraph
     paragraph = document.add_paragraph(f"Portfolio: {portfolio}, LinkedIn: {linkedin}")
     paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    # Newline
+    add_newline(document)
 
 
 def add_sections(document, sections):
