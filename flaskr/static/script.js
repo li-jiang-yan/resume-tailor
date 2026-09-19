@@ -1,7 +1,3 @@
-// Import components
-import { Spinner } from "./components/Spinner.js";
-
-
 //// JOB POST ANALYSIS ////
 import { analyzePost } from "./features/job-analysis.js";
 document.getElementById('analyzeButton').addEventListener('click', analyzePost);

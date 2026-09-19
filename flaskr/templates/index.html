@@ -24,6 +24,7 @@
             <textarea
               class="form-control auto-expand"
               id="postTextarea"
+              placeholder="Copy and paste the description of the job post here..."
               rows="3"></textarea>
           </div>
           <button
@@ -35,6 +36,9 @@
           <div
             class="my-3"
             id="analyzeOutput">
+            <div class="form-text">
+              By clicking this button, a graph with the top 10 most frequently used words/phrases used in the job description will be shown. This may help you to identify core priorities that matter most to the employer.
+            </div>
           </div>
         </div>
         <div class="col">
@@ -43,18 +47,23 @@
             class="form-label">
             Resume
           </label>
-          <div class="input-group mb-3">
-            <input
-              type="file"
-              id="jsonInput"
-              class="form-control">
-            <button
-              class="btn btn-secondary"
-              type="button"
-              id="uploadButton"
-              disabled>
-              Upload JSON
-            </button>
+          <div class="mb-3">
+            <div class="input-group">
+              <input
+                type="file"
+                id="jsonInput"
+                class="form-control">
+              <button
+                class="btn btn-secondary"
+                type="button"
+                id="uploadButton"
+                disabled>
+                Upload JSON
+              </button>
+            </div>
+            <div class="form-text">
+              Upload the JSON of the master version of your resume here.
+            </div>
           </div>
           <div class="mb-3">
             <label for="summaryTextarea">
@@ -74,6 +83,9 @@
           <div
             class="my-3"
             id="similarityOutput">
+            <div class="form-text">
+              By clicking this button, the similarity between the text of the job post description and the summary you wrote will be calculated and shown, giving an indication of how well the summary you wrote addresses the employer's requirements listed in the job post description.
+            </div>
           </div>
           <div
             class="mb-3"
