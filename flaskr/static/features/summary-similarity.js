@@ -3,9 +3,9 @@ import { Spinner } from "../components/Spinner.js";
 
 
 // Page elements
-const postTextarea = document.getElementById('jobAnalysisTextarea');
+const postTextarea = document.getElementById('postTextarea');
 const summaryTextarea = document.getElementById('summaryTextarea');
-const output = document.getElementById('summaryOutput');
+const output = document.getElementById('similarityOutput');
 
 
 // Functions to export

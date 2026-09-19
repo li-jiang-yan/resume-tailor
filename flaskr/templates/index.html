@@ -18,40 +18,40 @@
       <div class="row">
         <div class="col">
           <div class="mb-3">
-            <label for="jobAnalysisTextarea">
+            <label for="postTextarea">
               Job Description
             </label>
             <textarea
               class="form-control auto-expand"
-              id="jobAnalysisTextarea"
+              id="postTextarea"
               rows="3"></textarea>
           </div>
           <button
             type="button"
             class="btn btn-primary"
-            id="jobAnalysisButton">
+            id="analyzeButton">
             Analyze
           </button>
           <div
             class="my-3"
-            id="jobAnalysisOutput">
+            id="analyzeOutput">
           </div>
         </div>
         <div class="col">
           <label
-            for="jsonUploadInput"
+            for="jsonInput"
             class="form-label">
             Resume
           </label>
           <div class="input-group mb-3">
             <input
               type="file"
-              id="jsonUploadInput"
+              id="jsonInput"
               class="form-control">
             <button
               class="btn btn-secondary"
               type="button"
-              id="jsonUploadButton"
+              id="uploadButton"
               disabled>
               Upload JSON
             </button>
@@ -68,16 +68,16 @@
           <button
             type="button"
             class="btn btn-primary"
-            id="summaryButton">
+            id="similarityButton">
             Compute Similarity
           </button>
           <div
             class="my-3"
-            id="summaryOutput">
+            id="similarityOutput">
           </div>
           <div
             class="mb-3"
-            id="jsonUploadOutput">
+            id="uploadOutput">
           </div>
         </div>
       </div>

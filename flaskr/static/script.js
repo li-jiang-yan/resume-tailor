@@ -4,13 +4,13 @@ import { Spinner } from "./components/Spinner.js";
 
 //// JOB POST ANALYSIS ////
 import { analyzePost } from "./features/job-analysis.js";
-document.getElementById('jobAnalysisButton').addEventListener('click', analyzePost);
+document.getElementById('analyzeButton').addEventListener('click', analyzePost);
 
 
 //// RESUME JSON UPLOAD ////
 import { enableUpload, uploadJson } from "./features/json-upload.js";
-document.getElementById('jsonUploadInput').addEventListener('change', enableUpload);
-document.getElementById('jsonUploadButton').addEventListener('click', uploadJson);
+document.getElementById('jsonInput').addEventListener('change', enableUpload);
+document.getElementById('uploadButton').addEventListener('click', uploadJson);
 
 
 //// RESUME DOWNLOAD ////
@@ -19,7 +19,7 @@ document.getElementById('jsonUploadButton').addEventListener('click', uploadJson
 
 //// JOB POST TO SUMMARY SIMILARITY CALCULATION ////
 import { calculateSimilarity } from "./features/summary-similarity.js";
-document.getElementById('summaryButton').addEventListener('click', calculateSimilarity);
+document.getElementById('similarityButton').addEventListener('click', calculateSimilarity);
 
 
 //// UI UPDATES ////

@@ -4,8 +4,8 @@ import { Spinner } from "../components/Spinner.js";
 
 
 // Page elements
-const textArea = document.getElementById('jobAnalysisTextarea');
-const output = document.getElementById('jobAnalysisOutput');
+const textArea = document.getElementById('postTextarea');
+const output = document.getElementById('analyzeOutput');
 
 
 // Functions to export
