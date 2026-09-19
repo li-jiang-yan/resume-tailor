@@ -9,6 +9,7 @@ import { Certification } from "../components/Certification.js";
 import { CommaSeparatedList } from "../components/CommaSeparatedList.js";
 import { CommaSeparatedValue } from "../components/CommaSeparatedValue.js";
 import { Entry } from "../components/Entry.js";
+import { FormTextDiv } from "../components/FormTextDiv.js";
 import { InlineField } from "../components/InlineField.js";
 import { Label } from "../components/Label.js";
 import { NestedSortableDiv } from "../components/NestedSortableDiv.js";
@@ -68,7 +69,10 @@ function renderDownloadCard() {
 
   return Card(
     CardTitle('div', 'Download'),
-    ...Object.values(downloadButtons)
+    ...Object.values(downloadButtons),
+    FormTextDiv(
+      'After editing the resume below to your liking, you may download an updated master resume JSON (Master button), a non-master resume JSON (JSON button), or a formatted Word Doc resume (Word button).'
+    )
   );
 }
 
@@ -90,7 +94,10 @@ function renderHeader(headerObject) {
 function renderSections(sectionObjectArray) {
   const sections = SortableAccordionItem(
     'Sections',  // buttonText
-    ...sectionObjectArray.map(renderSection)
+    ...sectionObjectArray.map(renderSection),
+    FormTextDiv(
+      `Here, you may drag each section (as well as elements within each section) to sort them as shown in the resume output (some recruiters like resumes that are mirrors the job post description's structure). You may also use the checkboxes to include/exclude certain points from the resume as needed.`
+    )
   );
   sections.id = 'resumeSections';  // set id for use in createObject
   return sections;

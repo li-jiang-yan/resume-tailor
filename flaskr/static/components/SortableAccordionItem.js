@@ -28,7 +28,8 @@ function SortableAccordionBody(...children) {
   Sortable.create(result, {
     forceFallback: true,
     dragClass: 'opaque',
-    ghostClass: 'invisible'
+    ghostClass: 'invisible',
+    filter: '.filtered'
   });
 
   return result;
