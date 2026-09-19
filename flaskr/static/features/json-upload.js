@@ -22,9 +22,9 @@ import { addDownloadEventListeners } from "./resume-download.js";
 
 
 // Page elements
-const button = document.getElementById('jsonUploadButton');
-const input = document.getElementById('jsonUploadInput');
-const output = document.getElementById('jsonUploadOutput');
+const button = document.getElementById('uploadButton');
+const input = document.getElementById('jsonInput');
+const output = document.getElementById('uploadOutput');
 
 
 // Functions to export
