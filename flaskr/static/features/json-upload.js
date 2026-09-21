@@ -20,6 +20,7 @@ import { Section } from "../components/Section.js";
 
 // Function imports
 import { addDownloadEventListeners } from "./resume-download.js";
+import { resizeTextarea } from "../ui/textarea.js";
 
 
 // Page elements
@@ -51,6 +52,9 @@ export async function uploadJson() {
       downloadCard,
       Accordion(header, sections)
     );
+
+    // Adjust all textareas
+    document.querySelectorAll('textarea').forEach(resizeTextarea);
   } catch (error) {
     console.error('Error reading file:', error);
   }
