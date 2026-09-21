@@ -83,8 +83,8 @@ function parseChildren(parentElement, all) {
 
 function parseElement(inputElement, all) {
   if (inputElement.classList.contains('inline-field')) {
-    const key = convertToKey(inputElement.querySelectorAll('label')[0].innerText);
-    const value = inputElement.querySelectorAll('input')[0].value;
+    const key = convertToKey(inputElement.querySelector('label').innerText);
+    const value = inputElement.querySelector('input').value;
     return [key, value];
   } else if (inputElement.classList.contains('bulletlist')) {
     const key = 'bulletlist';
@@ -104,12 +104,12 @@ function convertToKey(str) {
 
 
 function isChecked(rowElement) {
-  return rowElement.querySelectorAll('.checkbox')[0].checked;
+  return rowElement.querySelector('.checkbox').checked;
 }
 
 
 function parseBulletpoint(bulletpointElement) {
-  return bulletpointElement.querySelectorAll('textarea')[0].value;
+  return bulletpointElement.querySelector('textarea').value;
 }
 
 
@@ -133,8 +133,8 @@ function parseSections(sectionsElement, all) {
 
 function parseSection(sectionElement, all) {
   const result = {};
-  const sectionTitle = sectionElement.querySelectorAll('.section-title')[0];
-  result.title = sectionTitle.querySelectorAll('input')[0].value;
+  const sectionTitle = sectionElement.querySelector('.section-title');
+  result.title = sectionTitle.querySelector('input').value;
 
   const entries = Array.from(sectionElement.querySelectorAll('.entry')).filter(
     (entryElement) => all ? true : isChecked(entryElement)
@@ -167,5 +167,5 @@ function parseEntry(entryElement, all) {
 
 
 function parseCSV(csvElement) {
-  return csvElement.querySelectorAll('.input-text')[0].value;
+  return csvElement.querySelector('.input-text').value;
 }
