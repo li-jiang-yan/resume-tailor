@@ -15,7 +15,7 @@ export function SortableAccordionItem(buttonText, ...bodyChildren) {
 
 
 function SortableAccordionCollapse(id, ...bodyChildren) {
-  const result = render(`<div class="accordion-collapse collapse" id="${id}"></div>`);
+  const result = render(`<div class="accordion-collapse collapse show" id="${id}"></div>`);
   result.replaceChildren(SortableAccordionBody(...bodyChildren));
   return result;
 }

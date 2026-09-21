@@ -15,7 +15,7 @@ export function AccordionItem(buttonText, ...bodyChildren) {
 
 
 function AccordionCollapse(id, ...bodyChildren) {
-  const result = render(`<div class="accordion-collapse collapse" id="${id}"></div>`);
+  const result = render(`<div class="accordion-collapse collapse show" id="${id}"></div>`);
   result.replaceChildren(AccordionBody(...bodyChildren));
   return result;
 }
