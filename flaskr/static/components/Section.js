@@ -3,8 +3,15 @@ import { CheckboxAccordion } from "./CheckboxAccordion.js";
 
 
 export function Section(accordionButtonText, ...accordionBodyChildren) {
-  const result = CheckboxAccordion(accordionButtonText, SectionTitle(accordionButtonText), ...accordionBodyChildren);
+  const title = SectionTitle(accordionButtonText);
+  const result = CheckboxAccordion(accordionButtonText, title, ...accordionBodyChildren);
   result.classList.add('section');
+
+  // Event listener for section title input
+  title.querySelector('input').addEventListener('input', (event) => {
+    result.querySelector('.accordion-button').textContent = event.target.value;
+  });
+
   return result;
 }
 
