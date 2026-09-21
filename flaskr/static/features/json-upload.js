@@ -145,10 +145,21 @@ function renderEntries(entryArray) {
 
 
 function renderEntry(entryObject) {
-  return Entry(
+  const entryFields = renderEntryFields(entryObject)
+  const result = Entry(
     entryObject.name,  // accordionButtonText
-    ...renderEntryFields(entryObject)
+    ...entryFields
   );
+
+  // Event listener for entry name input
+  const nameField = findNameField(entryFields);
+  if (nameField) {
+    nameField.addEventListener('input', (event) => {
+      result.querySelector('.accordion-button').textContent = event.target.value;
+    });
+  }
+
+  return result;
 }
 
 
@@ -181,6 +192,13 @@ function titleCase(str) {
 }
 
 
+function findNameField(fields) {
+  return fields.find((field) => {
+    return field.querySelector('label').textContent.trim().toLowerCase() === 'name';
+  });
+}
+
+
 function renderCertifications(certificationArray) {
   return NestedSortableDiv(
     ...certificationArray.map(renderCertification)
@@ -189,8 +207,19 @@ function renderCertifications(certificationArray) {
 
 
 function renderCertification(certificationObject) {
-  return Certification(
+  const entryFields = renderEntryFields(certificationObject);
+  const result = Certification(
     certificationObject.name,  // accordionButtonText
-    ...renderEntryFields(certificationObject)
+    ...entryFields
   );
+
+  // Event listener for entry name input
+  const nameField = findNameField(entryFields);
+  if (nameField) {
+    nameField.addEventListener('input', (event) => {
+      result.querySelector('.accordion-button').textContent = event.target.value;
+    });
+  }
+
+  return result;
 }
