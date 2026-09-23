@@ -40,3 +40,8 @@ document.addEventListener('click', (event) => {
 window.addEventListener('resize', () => {
   document.querySelectorAll('textarea').forEach(resizeTextarea);
 })
+
+
+//// JOB POST TO SECTION ITEMS SIMILARITY CALCULATION ////
+import { refreshCounts } from "./features/section-similarity.js";
+document.getElementById('postTextarea').addEventListener('input', refreshCounts);

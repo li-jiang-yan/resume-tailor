@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, render_template, request, send_file
 
-from . import analyzelib, doclib, similaritylib
+from . import analyzelib, countlib, doclib, similaritylib
 
 bp = Blueprint("blog", __name__)
 
@@ -35,3 +35,16 @@ def word():
     resume_json = request.get_json()
     file = doclib.generate(resume_json)
     return send_file(file, as_attachment=True, download_name="resume.docx")
+
+
+@bp.route("/count", methods=["POST"])
+def count():
+    """Counts the number of occurrences of a given word/phrase in a text."""
+    payload = request.get_json()
+    phrase = payload["phrase"]
+    text = payload["text"]
+    try:
+        result = countlib.count(phrase, text)
+    except Exception:  # noqa: BLE001
+        result = "-"
+    return jsonify({"count": result}), 200
