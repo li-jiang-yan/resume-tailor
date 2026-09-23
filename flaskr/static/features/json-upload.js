@@ -110,27 +110,21 @@ function renderSections(sectionObjectArray) {
 
 
 function renderSection(sectionObject) {
-  let sectionContent = 'lorem ipsum';
-
-  if (Object.hasOwn(sectionObject, 'cslist')) {
-    sectionContent = renderCSV(
-      sectionObject.cslist,   // csvArray
-      'text'                  // inputType
-    );
-  } else if (Object.hasOwn(sectionObject, 'entries')) {
-    sectionContent = renderEntries(
-      sectionObject.entries   // entryArray
-    )
-  } else if (Object.hasOwn(sectionObject, 'certifications')) {
-    sectionContent = renderCertifications(
-      sectionObject.certifications
-    )
-  }
-
   return Section(
-    sectionObject.title,      // accordionButtonText
-    sectionContent            // accordionBodyChildren
+    sectionObject.title,                 // accordionButtonText
+    renderSectionContent(sectionObject)  // accordionBodyChildren
   );
+}
+
+
+function renderSectionContent(sectionObject) {
+  if (Object.hasOwn(sectionObject, 'cslist')) {
+    return renderCSV(sectionObject.cslist, 'text');
+  } else if (Object.hasOwn(sectionObject, 'entries')) {
+    return renderEntries(sectionObject.entries);
+  } else if (Object.hasOwn(sectionObject, 'certifications')) {
+    return renderCertifications(sectionObject.certifications);
+  }
 }
 
 
