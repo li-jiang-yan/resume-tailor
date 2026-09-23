@@ -2,7 +2,6 @@
 import { Accordion } from "../components/Accordion.js";
 import { AccordionItem } from "../components/AccordionItem.js";
 import { Bulletlist } from "../components/Bulletlist.js";
-import { Bulletpoint } from "../components/Bulletpoint.js";
 import { Card } from "../components/Card.js"
 import { Certification } from "../components/Certification.js";
 import { CommaSeparatedValues } from "../components/CommaSeparatedValues.js";
@@ -163,11 +162,8 @@ function renderEntryField(key, value) {
 }
 
 
-function renderBulletlist(sourceArray) {
-  return Bulletlist(
-    Label('Bulletlist'),
-    ...sourceArray.map(Bulletpoint)
-  );
+function renderBulletlist(listArray) {
+  return Bulletlist(...listArray);
 }
 
 
