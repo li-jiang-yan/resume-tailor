@@ -169,14 +169,6 @@ function titleCase(str) {
 
 function renderCertifications(certificationArray) {
   return NestedSortableDiv(
-    ...certificationArray.map(renderCertification)
-  );
-}
-
-
-function renderCertification(certificationObject) {
-  return Certification(
-    certificationObject.name,
-    ...renderEntryFields(certificationObject)
+    ...certificationArray.map(Certification)
   );
 }
