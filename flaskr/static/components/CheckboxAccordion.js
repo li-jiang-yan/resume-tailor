@@ -12,18 +12,10 @@ export function CheckboxAccordion(accordionButtonText, ...accordionBodyChildren)
   const checkbox = Checkbox();
   checkbox.classList.add('col-auto', 'align-self-start', 'my-3');
 
-  // Remove button
-  const removeButton = DangerButton(IconTrash(), NonBreakingSpace(), accordionButtonText);
-  removeButton.classList.add('mb-3');
-  removeButton.addEventListener('click', () => {
-    result.remove();
-  });
-
   // Accordion
   const accordion = Accordion(
     AccordionItem(
       accordionButtonText,
-      removeButton,
       ...accordionBodyChildren
     )
   );
