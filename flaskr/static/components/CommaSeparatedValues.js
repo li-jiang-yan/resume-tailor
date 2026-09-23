@@ -6,6 +6,7 @@ import { FormText } from "./FormText.js";
 import { IconX } from "./IconX.js";
 import { Input } from "./Input.js";
 import { InputGroup } from "./InputGroup.js";
+import { InputGroupText } from "./InputGroupText.js";
 import { Label } from "./Label.js";
 import { NestedSortableDiv } from "./NestedSortableDiv.js";
 
@@ -59,12 +60,5 @@ function CommaSeparatedValue(value) {
   // Result (Container Div)
   const result = render('<div class="container csv"></div>');
   result.replaceChildren(rowDiv);
-  return result;
-}
-
-
-function InputGroupText(...children) {
-  const result = render('<span class="input-group-text"></span>');
-  result.replaceChildren(...children);
   return result;
 }

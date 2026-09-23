@@ -9,7 +9,7 @@ const output = document.getElementById('similarityOutput');
 
 
 // Functions to export
-export async function calculateSimilarity() {
+export async function calculateSimilaritySummary() {
   output.replaceChildren(Spinner());
 
   // Compute similarity in backend
