@@ -4,7 +4,6 @@ import { AccordionItem } from "../components/AccordionItem.js";
 import { Bulletlist } from "../components/Bulletlist.js";
 import { Bulletpoint } from "../components/Bulletpoint.js";
 import { Card } from "../components/Card.js"
-import { CardTitle } from "../components/CardTitle.js";
 import { Certification } from "../components/Certification.js";
 import { CommaSeparatedList } from "../components/CommaSeparatedList.js";
 import { CommaSeparatedValue } from "../components/CommaSeparatedValue.js";
@@ -74,7 +73,7 @@ function renderDownloadCard() {
   addDownloadEventListeners(downloadButtons);
 
   return Card(
-    CardTitle('div', 'Download'),
+    'Download',  // title
     ...Object.values(downloadButtons),
     FormTextDiv(
       'After editing the resume below to your liking, you may download an updated master resume JSON (Master button), a non-master resume JSON (JSON button), or a formatted Word Doc resume (Word button).'

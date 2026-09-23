@@ -1,10 +1,24 @@
 import { render } from "./render.js";
 
 
-export function Card(...elements) {
+export function Card(title, ...children) {
   const result = render('<div class="card"></div>');
-  const body = render('<div class="card-body"></div>');
-  body.replaceChildren(...elements);
-  result.replaceChildren(body);
+  result.replaceChildren(CardBody(
+    CardTitle(title),
+    ...children
+  ));
+  return result;
+}
+
+
+function CardTitle(content) {
+  const result = render(`<div class="card-title">${content}</div>`);
+  return result;
+}
+
+
+function CardBody(...children) {
+  const result = render('<div class="card-body"></div>');
+  result.replaceChildren(...children);
   return result;
 }
