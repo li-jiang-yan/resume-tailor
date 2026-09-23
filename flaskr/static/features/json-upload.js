@@ -15,8 +15,8 @@ import { Label } from "../components/Label.js";
 import { NestedSortableDiv } from "../components/NestedSortableDiv.js";
 import { NonBreakingSpace } from "../components/NonBreakingSpace.js";
 import { PrimaryButton } from "../components/PrimaryButton.js";
-import { SortableAccordionItem } from "../components/SortableAccordionItem.js";
 import { Section } from "../components/Section.js";
+import { SortableDiv } from "../components/SortableDiv.js";
 
 
 // Function imports
@@ -97,9 +97,9 @@ function renderHeader(headerObject) {
 
 
 function renderSections(sectionObjectArray) {
-  const sections = SortableAccordionItem(
+  const sections = AccordionItem(
     'Sections',  // buttonText
-    ...sectionObjectArray.map(renderSection),
+    SortableDiv(...sectionObjectArray.map(renderSection)),
     FormText(
       `Here, you may drag each section (as well as elements within each section) to sort them as shown in the resume output (some recruiters like resumes that are mirrors the job post description's structure). You may also use the checkboxes to include/exclude certain points from the resume as needed.`
     )
