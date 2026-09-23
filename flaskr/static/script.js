@@ -32,8 +32,11 @@ document.addEventListener('input', (event) => {
 document.addEventListener('click', (event) => {
   if (event.target.classList.contains('accordion-button')) {
     const collapseId = event.target.getAttribute('data-bs-target').slice(1);
-    document.getElementById(collapseId).querySelectorAll('textarea').forEach(
-      textarea => resizeTextarea(textarea)
-    );
+    document.getElementById(collapseId).querySelectorAll('textarea').forEach(resizeTextarea);
   }
 });
+
+// Auto-adjust the height of all text areas when window is resized
+window.addEventListener('resize', () => {
+  document.querySelectorAll('textarea').forEach(resizeTextarea);
+})
