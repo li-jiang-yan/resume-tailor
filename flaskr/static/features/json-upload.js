@@ -5,8 +5,7 @@ import { Bulletlist } from "../components/Bulletlist.js";
 import { Bulletpoint } from "../components/Bulletpoint.js";
 import { Card } from "../components/Card.js"
 import { Certification } from "../components/Certification.js";
-import { CommaSeparatedList } from "../components/CommaSeparatedList.js";
-import { CommaSeparatedValue } from "../components/CommaSeparatedValue.js";
+import { CommaSeparatedValues } from "../components/CommaSeparatedValues.js";
 import { Entry } from "../components/Entry.js";
 import { FormText } from "../components/FormText.js";
 import { IconTrash } from "../components/IconTrash.js";
@@ -119,7 +118,7 @@ function renderSection(sectionObject) {
 
 function renderSectionContent(sectionObject) {
   if (Object.hasOwn(sectionObject, 'cslist')) {
-    return renderCSV(sectionObject.cslist, 'text');
+    return renderCSV(sectionObject.cslist);
   } else if (Object.hasOwn(sectionObject, 'entries')) {
     return renderEntries(sectionObject.entries);
   } else if (Object.hasOwn(sectionObject, 'certifications')) {
@@ -128,11 +127,8 @@ function renderSectionContent(sectionObject) {
 }
 
 
-function renderCSV(csvArray, inputType) {
-  return CommaSeparatedList(
-    Label('List'),
-    ...csvArray.map((value) => CommaSeparatedValue(inputType, value))
-  );
+function renderCSV(values) {
+  return CommaSeparatedValues(...values);
 }
 
 
