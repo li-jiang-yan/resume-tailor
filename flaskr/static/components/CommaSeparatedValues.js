@@ -12,7 +12,7 @@ import { NestedSortableDiv } from "./NestedSortableDiv.js";
 export function CommaSeparatedValues(...values) {
   const result = Div(
     Label('Comma Separated Values'),
-    NestedSortableDiv(...values.map((value) => CommaSeparatedValue(value)))
+    NestedSortableDiv(...values.map(CommaSeparatedValue))
   );
   result.classList.add('cslist');
   return result;
