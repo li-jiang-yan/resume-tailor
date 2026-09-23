@@ -155,15 +155,10 @@ function renderEntryFields(entryObject) {
 
 function renderEntryField(key, value) {
   if (key === 'bulletlist') {
-    return renderBulletlist(value);
+    return Bulletlist(...value);
   } else {
     return InlineField(titleCase(key), 'text', value);
   }
-}
-
-
-function renderBulletlist(listArray) {
-  return Bulletlist(...listArray);
 }
 
 
