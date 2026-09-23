@@ -1,17 +1,28 @@
+import { Bulletlist } from "./Bulletlist.js";
 import { CheckboxAccordion } from "./CheckboxAccordion.js";
 import { DangerButton } from "./DangerButton.js";
 import { IconTrash } from "./IconTrash.js";
+import { InlineField } from "./InlineField.js";
 import { NonBreakingSpace } from "./NonBreakingSpace.js";
 
 
-export function Entry(accordionButtonText, ...accordionBodyChildren) {
-  const removeButton = DangerButton(IconTrash(), NonBreakingSpace(), accordionButtonText);
+export function Entry(entryObject) {
+  const name = entryObject.name;
+
+  // Remove Button
+  const removeButton = DangerButton(IconTrash(), NonBreakingSpace(), name);
   removeButton.classList.add('mb-3');
   removeButton.addEventListener('click', () => {
     result.remove();
   });
 
-  const nameField = accordionBodyChildren.find((child) => {
+  // Fields
+  const entryFields = Object.entries(entryObject).map(
+    ([key, value]) => EntryField(key, value)
+  );
+
+  // Name Field
+  const nameField = entryFields.find((child) => {
     return child.querySelector('label').textContent.trim().toLowerCase() === 'name';
   });
   nameField.querySelector('input').addEventListener('input', (event) => {
@@ -19,8 +30,23 @@ export function Entry(accordionButtonText, ...accordionBodyChildren) {
     removeButton.replaceChildren(IconTrash(), NonBreakingSpace(), event.target.value);
   });
 
-  const result = CheckboxAccordion(accordionButtonText, removeButton, ...accordionBodyChildren);
+  // Output
+  const result = CheckboxAccordion(name, removeButton, ...entryFields);
   result.classList.add('entry');
 
   return result;
+}
+
+
+function EntryField(key, value) {
+  if (key === 'bulletlist') {
+    return Bulletlist(...value);
+  } else {
+    return InlineField(titleCase(key), 'text', value);
+  }
+}
+
+
+function titleCase(str) {
+  return `${str.charAt(0).toUpperCase()}${str.slice(1)}`
 }

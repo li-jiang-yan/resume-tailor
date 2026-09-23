@@ -133,37 +133,8 @@ function renderCSV(values) {
 
 function renderEntries(entryArray) {
   return NestedSortableDiv(
-    ...entryArray.map(renderEntry)
+    ...entryArray.map(Entry)
   );
-}
-
-
-function renderEntry(entryObject) {
-  return Entry(
-    entryObject.name,  // accordionButtonText
-    ...renderEntryFields(entryObject)
-  );
-}
-
-
-function renderEntryFields(entryObject) {
-  return Object.entries(entryObject).map(
-    ([key, value]) => renderEntryField(key, value)
-  );
-}
-
-
-function renderEntryField(key, value) {
-  if (key === 'bulletlist') {
-    return Bulletlist(...value);
-  } else {
-    return InlineField(titleCase(key), 'text', value);
-  }
-}
-
-
-function titleCase(str) {
-  return `${str.charAt(0).toUpperCase()}${str.slice(1)}`
 }
 
 
