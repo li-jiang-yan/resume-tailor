@@ -14,8 +14,8 @@ document.getElementById('uploadButton').addEventListener('click', uploadJson);
 
 
 //// JOB POST TO SUMMARY SIMILARITY CALCULATION ////
-import { calculateSimilarity } from "./features/summary-similarity.js";
-document.getElementById('similarityButton').addEventListener('click', calculateSimilarity);
+import { calculateSimilaritySummary } from "./features/summary-similarity.js";
+document.getElementById('similarityButton').addEventListener('click', calculateSimilaritySummary);
 
 
 //// UI UPDATES ////
@@ -40,3 +40,9 @@ document.addEventListener('click', (event) => {
 window.addEventListener('resize', () => {
   document.querySelectorAll('textarea').forEach(resizeTextarea);
 })
+
+
+//// JOB POST TO SECTION ITEMS SIMILARITY CALCULATION ////
+import { refreshCounts, refreshSimilaritiesBulletpoint } from "./features/section-similarity.js";
+document.getElementById('postTextarea').addEventListener('input', refreshCounts);
+document.getElementById('postTextarea').addEventListener('input', refreshSimilaritiesBulletpoint);

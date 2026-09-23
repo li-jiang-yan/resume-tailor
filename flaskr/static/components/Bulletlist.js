@@ -2,11 +2,16 @@ import { render } from "./render.js";
 import { Checkbox } from "./Checkbox.js";
 import { DangerButton } from "./DangerButton.js";
 import { Div } from "./Div.js";
+import { FormText } from "./FormText.js";
 import { IconX } from "./IconX.js";
 import { InputGroup } from "./InputGroup.js";
+import { InputGroupText } from "./InputGroupText.js"
 import { Label } from "./Label.js";
 import { NestedSortableDiv } from "./NestedSortableDiv.js";
 import { Textarea } from "./Textarea.js";
+
+
+import { calculateSimilarityBulletpoint } from "../features/section-similarity.js";
 
 
 export function Bulletlist(...values) {
@@ -24,6 +29,16 @@ function Bulletpoint(value) {
   const checkbox = Checkbox();
   checkbox.classList.add('col-auto', 'align-self-start', 'me-3', 'my-3');
 
+  // Text Area
+  const textArea = Textarea(value);
+  textArea.addEventListener('input', async (event) => {
+    calculateSimilarityBulletpoint(event.target.value, countText);
+  });
+
+  // Count Text
+  const countText = FormText();
+  calculateSimilarityBulletpoint(value, countText);
+
   // Remove Button
   const removeButton = DangerButton(IconX());
   removeButton.addEventListener('click', () => {
@@ -33,6 +48,7 @@ function Bulletpoint(value) {
   // Input Group
   const inputGroup = InputGroup(
     Textarea(value),
+    InputGroupText(countText),
     removeButton
   );
   inputGroup.classList.add('col');
