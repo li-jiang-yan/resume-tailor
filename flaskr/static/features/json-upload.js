@@ -10,9 +10,11 @@ import { CommaSeparatedList } from "../components/CommaSeparatedList.js";
 import { CommaSeparatedValue } from "../components/CommaSeparatedValue.js";
 import { Entry } from "../components/Entry.js";
 import { FormTextDiv } from "../components/FormTextDiv.js";
+import { IconTrash } from "../components/IconTrash.js";
 import { InlineField } from "../components/InlineField.js";
 import { Label } from "../components/Label.js";
 import { NestedSortableDiv } from "../components/NestedSortableDiv.js";
+import { NonBreakingSpace } from "../components/NonBreakingSpace.js";
 import { PrimaryButton } from "../components/PrimaryButton.js";
 import { SortableAccordionItem } from "../components/SortableAccordionItem.js";
 import { Section } from "../components/Section.js";
@@ -160,6 +162,7 @@ function renderEntry(entryObject) {
   if (nameField) {
     nameField.addEventListener('input', (event) => {
       result.querySelector('.accordion-button').textContent = event.target.value;
+      result.querySelector('.btn-danger').replaceChildren(IconTrash(), NonBreakingSpace(), event.target.value);
     });
   }
 
@@ -222,6 +225,7 @@ function renderCertification(certificationObject) {
   if (nameField) {
     nameField.addEventListener('input', (event) => {
       result.querySelector('.accordion-button').textContent = event.target.value;
+      result.querySelector('.btn-danger').replaceChildren(IconTrash(), NonBreakingSpace(), event.target.value);
     });
   }
 
