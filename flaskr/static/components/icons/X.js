@@ -1,7 +1,7 @@
-import { render } from "./render.js";
+import { render } from "../render.js";
 
 
-export function IconX() {
+export function X() {
   return render(`
     <svg
       xmlns="http://www.w3.org/2000/svg"

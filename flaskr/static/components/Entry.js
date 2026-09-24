@@ -1,7 +1,7 @@
 import { Bulletlist } from "./Bulletlist.js";
 import { CheckboxAccordion } from "./CheckboxAccordion.js";
 import { DangerButton } from "./DangerButton.js";
-import { IconTrash } from "./IconTrash.js";
+import { Trash } from "./icons/Trash.js";
 import { InlineField } from "./InlineField.js";
 import { NonBreakingSpace } from "./NonBreakingSpace.js";
 
@@ -10,7 +10,7 @@ export function Entry(entryObject) {
   const name = entryObject.name;
 
   // Remove Button
-  const removeButton = DangerButton(IconTrash(), NonBreakingSpace(), name);
+  const removeButton = DangerButton(Trash(), NonBreakingSpace(), name);
   removeButton.classList.add('mb-3');
   removeButton.addEventListener('click', () => {
     result.remove();
@@ -27,7 +27,7 @@ export function Entry(entryObject) {
   });
   nameField.querySelector('input').addEventListener('input', (event) => {
     result.querySelector('.accordion-button').textContent = event.target.value;
-    removeButton.replaceChildren(IconTrash(), NonBreakingSpace(), event.target.value);
+    removeButton.replaceChildren(Trash(), NonBreakingSpace(), event.target.value);
   });
 
   // Output

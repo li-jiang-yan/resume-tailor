@@ -1,12 +1,12 @@
 import { render } from "./render.js";
 import { CheckboxAccordion } from "./CheckboxAccordion.js";
 import { DangerButton } from "./DangerButton.js";
-import { IconTrash } from "./IconTrash.js";
+import { Trash } from "./icons/Trash.js";
 import { NonBreakingSpace } from "./NonBreakingSpace.js";
 
 
 export function Section(accordionButtonText, ...accordionBodyChildren) {
-  const removeButton = DangerButton(IconTrash(), NonBreakingSpace(), accordionButtonText);
+  const removeButton = DangerButton(Trash(), NonBreakingSpace(), accordionButtonText);
   removeButton.classList.add('mb-3');
   removeButton.addEventListener('click', () => {
     result.remove();
@@ -15,7 +15,7 @@ export function Section(accordionButtonText, ...accordionBodyChildren) {
   const title = SectionTitle(accordionButtonText);
   title.querySelector('input').addEventListener('input', (event) => {
     result.querySelector('.accordion-button').textContent = event.target.value;
-    removeButton.replaceChildren(IconTrash(), NonBreakingSpace(), event.target.value);
+    removeButton.replaceChildren(Trash(), NonBreakingSpace(), event.target.value);
   });
 
   const result = CheckboxAccordion(accordionButtonText, removeButton, title, ...accordionBodyChildren);

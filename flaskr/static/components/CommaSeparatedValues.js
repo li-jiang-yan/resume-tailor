@@ -3,7 +3,7 @@ import { Checkbox } from "./Checkbox.js";
 import { DangerButton } from "./DangerButton.js";
 import { Div } from "./Div.js";
 import { FormText } from "./FormText.js";
-import { IconX } from "./IconX.js";
+import { X } from "./icons/X.js";
 import { Input } from "./Input.js";
 import { InputGroup } from "./InputGroup.js";
 import { InputGroupText } from "./InputGroupText.js";
@@ -40,7 +40,7 @@ function CommaSeparatedValue(value) {
   calculateCount(value, countText);
 
   // Remove Button
-  const removeButton = DangerButton(IconX());
+  const removeButton = DangerButton(X());
   removeButton.addEventListener('click', () => {
     result.remove();
   });

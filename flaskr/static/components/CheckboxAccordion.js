@@ -3,7 +3,7 @@ import { Accordion } from "./Accordion.js";
 import { AccordionItem } from "./AccordionItem.js";
 import { Checkbox } from "./Checkbox.js";
 import { DangerButton } from "./DangerButton.js";
-import { IconTrash } from "./IconTrash.js";
+import { Trash } from "./icons/Trash.js";
 import { NonBreakingSpace } from "./NonBreakingSpace.js";
 
 
