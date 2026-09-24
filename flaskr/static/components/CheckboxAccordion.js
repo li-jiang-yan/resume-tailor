@@ -1,10 +1,7 @@
-import { render } from "./render.js";
 import { Accordion } from "./Accordion.js";
 import { AccordionItem } from "./AccordionItem.js";
 import { Checkbox } from "./Checkbox.js";
-import { DangerButton } from "./DangerButton.js";
-import { Trash } from "./icons/Trash.js";
-import { NonBreakingSpace } from "./NonBreakingSpace.js";
+import { RowDiv } from "./RowDiv.js";
 
 
 export function CheckboxAccordion(accordionButtonText, ...accordionBodyChildren) {
@@ -22,7 +19,6 @@ export function CheckboxAccordion(accordionButtonText, ...accordionBodyChildren)
   accordion.classList.add('col');
 
   // Result
-  const result = render('<div class="row"></div>');
-  result.replaceChildren(checkbox, accordion);
+  const result = RowDiv(checkbox, accordion);
   return result;
 }

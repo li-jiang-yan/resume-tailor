@@ -1,8 +1,8 @@
 import { render } from "./render.js";
 
 
-export function Card(...children) {
-  const result = render('<div class="card"></div>');
+export function CardBody(...children) {
+  const result = render('<div class="card-body"></div>');
   result.replaceChildren(...children);
   return result;
 }

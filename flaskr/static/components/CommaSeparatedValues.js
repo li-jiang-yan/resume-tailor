@@ -9,6 +9,7 @@ import { InputGroup } from "./InputGroup.js";
 import { InputGroupText } from "./InputGroupText.js";
 import { Label } from "./Label.js";
 import { NestedSortableDiv } from "./NestedSortableDiv.js";
+import { RowDiv } from "./RowDiv.js";
 
 
 import { calculateCount } from "../features/section-similarity.js";
@@ -54,8 +55,7 @@ function CommaSeparatedValue(value) {
   inputGroup.classList.add('col');
 
   // Row Div
-  const rowDiv = render('<div class="row"></div>');
-  rowDiv.replaceChildren(checkbox, inputGroup);
+  const rowDiv = RowDiv(checkbox, inputGroup);
 
   // Result (Container Div)
   const result = render('<div class="container csv"></div>');

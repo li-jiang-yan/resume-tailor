@@ -2,6 +2,8 @@
 import { Accordion } from "../components/Accordion.js";
 import { AccordionItem } from "../components/AccordionItem.js";
 import { Card } from "../components/Card.js"
+import { CardBody } from "../components/CardBody.js";
+import { CardTitle } from "../components/CardTitle.js";
 import { Certification } from "../components/Certification.js";
 import { CommaSeparatedValues } from "../components/CommaSeparatedValues.js";
 import { Entry } from "../components/Entry.js";
@@ -67,10 +69,12 @@ function renderDownloadCard() {
   addDownloadEventListeners(downloadButtons);
 
   return Card(
-    'Download',  // title
-    ...Object.values(downloadButtons),
-    FormText(
-      'After editing the resume below to your liking, you may download an updated master resume JSON (Master button), a non-master resume JSON (JSON button), or a formatted Word Doc resume (Word button).'
+    CardBody(
+      CardTitle('Download'),
+      ...Object.values(downloadButtons),
+      FormText(
+        'After editing the resume below to your liking, you may download an updated master resume JSON (Master button), a non-master resume JSON (JSON button), or a formatted Word Doc resume (Word button).'
+      )
     )
   );
 }
