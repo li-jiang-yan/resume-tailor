@@ -6,6 +6,7 @@ import { CardBody } from "../components/CardBody.js";
 import { CardImgTop } from "../components/CardImgTop.js";
 import { CardTitle } from "../components/CardTitle.js";
 import { Certification } from "../components/Certification.js";
+import { CommaSeparatedValue } from "../components/CommaSeparatedValue.js";
 import { CommaSeparatedValues } from "../components/CommaSeparatedValues.js";
 import { DefaultEntry } from "../components/DefaultEntry.js";
 import { Div } from "../components/Div.js";
@@ -181,9 +182,24 @@ function renderSections(sectionObjectArray) {
 
 
 function renderSection(sectionObject) {
+  const addButton = SuccessButton(Plus(), NonBreakingSpace(), 'Entry');
+  addButton.addEventListener('click', () => {
+    if (sectionObject.type === 'skill') {
+      sectionContent.querySelector('.nested-sorted').prepend(CommaSeparatedValue());
+    } else if (sectionObject.type === 'certification') {
+      sectionContent.prepend(Certification());
+    } else if (sectionObject.type === 'default') {
+      sectionContent.prepend(DefaultEntry());
+    } else if (sectionObject.type === 'employment') {
+      sectionContent.prepend(Employment());
+    }
+  });
+
+  const sectionContent = renderSectionContent(sectionObject);
   const section = Section(
-    sectionObject.title,                 // accordionButtonText
-    renderSectionContent(sectionObject)  // accordionBodyChildren
+    sectionObject.title,  // accordionButtonText
+    addButton,            // accordionBodyChildren
+    sectionContent
   );
   section.classList.add(`section-${sectionObject.type}`);
   return section;

@@ -5,7 +5,14 @@ import { InlineField } from "./InlineField.js";
 import { NonBreakingSpace } from "./NonBreakingSpace.js";
 
 
-export function Certification(certificationObject) {
+const DEFAULT = {
+  name: '(Unnamed Certification)',
+  institution: '',
+  dates: ''
+};
+
+
+export function Certification(certificationObject = DEFAULT) {
   const name = certificationObject.name;
   const institution = certificationObject.institution;
   const dates = certificationObject.dates;

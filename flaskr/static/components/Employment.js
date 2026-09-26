@@ -6,7 +6,15 @@ import { InlineField } from "./InlineField.js";
 import { NonBreakingSpace } from "./NonBreakingSpace.js";
 
 
-export function Employment(entryObject) {
+const DEFAULT = {
+  name: '(Unnamed Employment)',
+  dates: '',
+  company: '',
+  bulletlist: []
+};
+
+
+export function Employment(entryObject = DEFAULT) {
   const name = entryObject.name;
   const dates = entryObject.dates;
   const company = entryObject.company;

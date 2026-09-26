@@ -6,7 +6,14 @@ import { InlineField } from "./InlineField.js";
 import { NonBreakingSpace } from "./NonBreakingSpace.js";
 
 
-export function DefaultEntry(entryObject) {
+const DEFAULT = {
+  name: '(Unnamed Education/Project)',
+  dates: '',
+  bulletlist: []
+};
+
+
+export function DefaultEntry(entryObject = DEFAULT) {
   const name = entryObject.name;
   const dates = entryObject.dates;
 
