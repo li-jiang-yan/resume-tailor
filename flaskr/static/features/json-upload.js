@@ -3,16 +3,24 @@ import { Accordion } from "../components/Accordion.js";
 import { AccordionItem } from "../components/AccordionItem.js";
 import { Card } from "../components/Card.js"
 import { CardBody } from "../components/CardBody.js";
+import { CardImgTop } from "../components/CardImgTop.js";
 import { CardTitle } from "../components/CardTitle.js";
 import { Certification } from "../components/Certification.js";
 import { CommaSeparatedValues } from "../components/CommaSeparatedValues.js";
+import { Div } from "../components/Div.js";
 import { Entry } from "../components/Entry.js";
 import { FormText } from "../components/FormText.js";
 import { InlineField } from "../components/InlineField.js";
+import { Modal } from "../components/Modal.js";
+import { ModalBody } from "../components/ModalBody.js";
+import { ModalHeader } from "../components/ModalHeader.js";
 import { NestedSortableDiv } from "../components/NestedSortableDiv.js";
+import { NonBreakingSpace } from "../components/NonBreakingSpace.js";
+import { Plus } from "../components/icons/Plus.js";
 import { PrimaryButton } from "../components/PrimaryButton.js";
 import { Section } from "../components/Section.js";
 import { SortableDiv } from "../components/SortableDiv.js";
+import { SuccessButton } from "../components/SuccessButton.js";
 
 
 // Function imports
@@ -95,9 +103,73 @@ function renderHeader(headerObject) {
 
 
 function renderSections(sectionObjectArray) {
+  // Add Section
+  const addButton = SuccessButton(Plus(), NonBreakingSpace(), 'Section');
+  const selections = {
+    skill: {
+      src: '../static/images/skill.png',
+      button: PrimaryButton('Skill Section'),
+      description: 'Add a new skill section where values are separated by commas.'
+    },
+    certification: {
+      src: '../static/images/certification.png',
+      button: PrimaryButton('Certification Section'),
+      description: 'Add a new certification section where certifications are separated by bulletpoints.'
+    },
+    education: {
+      src: '../static/images/education_project.png',
+      button: PrimaryButton('Project Section'),
+      description: 'Add a new education/project section where each education/project has a heading, date(s) and a bulletlist.'
+    },
+    employment: {
+      src: '../static/images/employment.png',
+      button: PrimaryButton('Employment Section'),
+      description: 'Add a new employment section where each employment has a heading, date(s), a subheading (company) and a bulletlist.'
+    }
+  };
+  const modalElement = Modal(
+    ModalHeader('Add New Section'),
+    ModalBody(
+      ...Object.entries(selections).map(([_, value]) => {
+        const card = Card(
+          CardImgTop(value.src),
+          CardBody(value.button, Div(value.description))
+        );
+        value.button.classList.add('mb-3');
+        card.classList.add('mb-3');
+
+        return card;
+      })
+    )
+  );
+  const modal = new bootstrap.Modal(modalElement);
+
+  // Add Section: Event listeners
+  addButton.addEventListener('click', () => {
+    modal.show();
+  });
+
+  // Add Section: Suppress aria-hidden warnings
+  modalElement.addEventListener('hide.bs.modal', (event) => {
+    if (event.defaultPrevented) return;
+
+    const focused = document.activeElement;
+    if (focused instanceof HTMLElement && modalElement.contains(focused)) {
+      focused.blur();
+    }
+  });
+
+  modalElement.addEventListener('hidden.bs.modal', () => {
+    if (addButton.isConnected && !addButton.disabled) {
+      addButton.focus({ preventScroll: true });
+    }
+  });
+
+  const sectionsBody = SortableDiv(...sectionObjectArray.map(renderSection));
   const sections = AccordionItem(
     'Sections',  // buttonText
-    SortableDiv(...sectionObjectArray.map(renderSection)),
+    addButton,
+    sectionsBody,
     FormText(
       `Here, you may drag each section (as well as elements within each section) to sort them as shown in the resume output (some recruiters like resumes that are mirrors the job post description's structure). You may also use the checkboxes to include/exclude certain points from the resume as needed.`
     )
