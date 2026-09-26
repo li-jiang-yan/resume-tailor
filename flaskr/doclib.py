@@ -111,15 +111,41 @@ def add_section(document, section):
     run.font.size = Pt(12)
 
     # Add section contents
-    if "entries" in section:
-        entries = section["entries"]
+    stype = section["type"]
+    entries = section["entries"]
+    if stype == "skill":
+        add_cslist(document, entries)
+    elif stype == "certification":
+        add_certifications(document, entries)
+    elif stype == "default":
         add_entries(document, entries)
-    elif "cslist" in section:
-        cslist = section["cslist"]
-        add_cslist(document, cslist)
-    elif "certifications" in section:
-        certifications = section["certifications"]
-        add_certifications(document, certifications)
+    elif stype == "employment":
+        add_employments(document, entries)
+
+
+def add_cslist(document, entries):
+    """Add a comma-separated list of a section to the given resume document."""
+    document.add_paragraph(", ".join(entries))
+
+
+def add_certifications(document, entries):
+    """Add entries (of a section) to the given resume document."""
+    for certification in entries:
+        add_certification(document, certification)
+
+
+def add_certification(document, certification):
+    """Add a given certification of a section to the given resume document."""
+    # Get paragraph parameters
+    name = certification["name"]
+    institution = certification["institution"]
+    dates = certification["dates"]
+
+    # Create paragraph
+    paragraph = document.add_paragraph("", style="List Bullet")
+    run = paragraph.add_run(name)
+    run.bold = True
+    paragraph.add_run(f", {institution} - {dates}")
 
 
 def add_entries(document, entries):
@@ -136,7 +162,7 @@ def add_entry(document, entry):
     """Add an entry of a section to the given resume document."""
     # Get entry parameters
     name = entry["name"]
-    dates = entry["date(s)"]
+    dates = entry["dates"]
 
     # Name and dates paragraph
     paragraph = document.add_paragraph()
@@ -160,29 +186,41 @@ def add_entry(document, entry):
         document.add_paragraph(bulletpoint, style="List Bullet")
 
 
-def add_cslist(document, cslist):
-    """Add a comma-separated list of a section to the given resume document."""
-    document.add_paragraph(", ".join(cslist))
+def add_employments(document, entries):
+    """Add employments to the given resume document."""
+    for index, entry in enumerate(entries):
+        add_employment(document, entry)
+
+        # Add a newline if entry is not the last
+        if index != len(entries) - 1:
+            add_newline(document)
 
 
-def add_certifications(document, certifications):
-    """Add certifications (of a section) to the given resume document."""
-    for certification in certifications:
-        add_certification(document, certification)
+def add_employment(document, entry):
+    """Add an entry of a section to the given resume document."""
+    # Get entry parameters
+    name = entry["name"]
+    dates = entry["dates"]
+    company = entry["company"]
 
-
-def add_certification(document, certification):
-    """Add a given certification of a section to the given resume document."""
-    # Get paragraph parameters
-    name = certification["name"]
-    institution = certification["institution"]
-    dates = certification["date(s)"]
-
-    # Create paragraph
-    paragraph = document.add_paragraph("", style="List Bullet")
-    run = paragraph.add_run(name)
+    # Name and dates paragraph
+    paragraph = document.add_paragraph()
+    paragraph.paragraph_format.tab_stops.add_tab_stop(
+        Inches(7.27),  # right margin position
+        alignment=WD_TAB_ALIGNMENT.RIGHT,
+    )
+    run = paragraph.add_run(f"{name}\t{dates}")
     run.bold = True
-    paragraph.add_run(f", {institution} - {dates}")
+
+    # Company paragraph
+    paragraph = document.add_paragraph()
+    run = paragraph.add_run(company)
+    run.bold = True
+
+    # Bulletpoints
+    bulletlist = entry["bulletlist"]
+    for bulletpoint in bulletlist:
+        document.add_paragraph(bulletpoint, style="List Bullet")
 
 
 def add_newline(document):

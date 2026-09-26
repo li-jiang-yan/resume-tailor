@@ -2,15 +2,26 @@
 import { Accordion } from "../components/Accordion.js";
 import { AccordionItem } from "../components/AccordionItem.js";
 import { Card } from "../components/Card.js"
+import { CardBody } from "../components/CardBody.js";
+import { CardImgTop } from "../components/CardImgTop.js";
+import { CardTitle } from "../components/CardTitle.js";
 import { Certification } from "../components/Certification.js";
 import { CommaSeparatedValues } from "../components/CommaSeparatedValues.js";
-import { Entry } from "../components/Entry.js";
+import { DefaultEntry } from "../components/DefaultEntry.js";
+import { Div } from "../components/Div.js";
+import { Employment } from "../components/Employment.js";
 import { FormText } from "../components/FormText.js";
 import { InlineField } from "../components/InlineField.js";
+import { Modal } from "../components/Modal.js";
+import { ModalBody } from "../components/ModalBody.js";
+import { ModalHeader } from "../components/ModalHeader.js";
 import { NestedSortableDiv } from "../components/NestedSortableDiv.js";
+import { NonBreakingSpace } from "../components/NonBreakingSpace.js";
+import { Plus } from "../components/icons/Plus.js";
 import { PrimaryButton } from "../components/PrimaryButton.js";
 import { Section } from "../components/Section.js";
 import { SortableDiv } from "../components/SortableDiv.js";
+import { SuccessButton } from "../components/SuccessButton.js";
 
 
 // Function imports
@@ -67,10 +78,12 @@ function renderDownloadCard() {
   addDownloadEventListeners(downloadButtons);
 
   return Card(
-    'Download',  // title
-    ...Object.values(downloadButtons),
-    FormText(
-      'After editing the resume below to your liking, you may download an updated master resume JSON (Master button), a non-master resume JSON (JSON button), or a formatted Word Doc resume (Word button).'
+    CardBody(
+      CardTitle('Download'),
+      ...Object.values(downloadButtons),
+      FormText(
+        'After editing the resume below to your liking, you may download an updated master resume JSON (Master button), a non-master resume JSON (JSON button), or a formatted Word Doc resume (Word button).'
+      )
     )
   );
 }
@@ -91,9 +104,87 @@ function renderHeader(headerObject) {
 
 
 function renderSections(sectionObjectArray) {
+  // Add Section
+  const addButton = SuccessButton(Plus(), NonBreakingSpace(), 'Section');
+  const selections = {
+    skill: {
+      src: '../static/images/skill.png',
+      button: PrimaryButton('Skill Section'),
+      description: 'Add a new skill section where values are separated by commas.'
+    },
+    certification: {
+      src: '../static/images/certification.png',
+      button: PrimaryButton('Certification Section'),
+      description: 'Add a new certification section where certifications are separated by bulletpoints.'
+    },
+    default: {
+      src: '../static/images/default.png',
+      button: PrimaryButton('Education/Project Section'),
+      description: 'Add a new education/project section where each education/project has a heading, date(s) and a bulletlist.'
+    },
+    employment: {
+      src: '../static/images/employment.png',
+      button: PrimaryButton('Employment Section'),
+      description: 'Add a new employment section where each employment has a heading, date(s), a subheading (company) and a bulletlist.'
+    }
+  };
+  const modalElement = Modal(
+    ModalHeader('Add New Section'),
+    ModalBody(
+      ...Object.entries(selections).map(([_, value]) => {
+        const card = Card(
+          CardImgTop(value.src),
+          CardBody(value.button, Div(value.description))
+        );
+        value.button.classList.add('mb-3');
+        card.classList.add('mb-3');
+
+        return card;
+      })
+    )
+  );
+  const modal = new bootstrap.Modal(modalElement);
+
+  // Add Section: Event listeners
+  addButton.addEventListener('click', () => { modal.show(); });
+  Object.entries(selections).forEach(([key, value]) => {
+    value.button.setAttribute('data-bs-dismiss', 'modal');
+    value.button.addEventListener(
+      'click',
+      () => {
+        sectionsBody.prepend(
+          renderSection(
+            {
+              title: '(Untitled Section)',
+              type: key
+            }
+          )
+        );
+      }
+    );
+  });
+
+  // Add Section: Suppress aria-hidden warnings
+  modalElement.addEventListener('hide.bs.modal', (event) => {
+    if (event.defaultPrevented) return;
+
+    const focused = document.activeElement;
+    if (focused instanceof HTMLElement && modalElement.contains(focused)) {
+      focused.blur();
+    }
+  });
+
+  modalElement.addEventListener('hidden.bs.modal', () => {
+    if (addButton.isConnected && !addButton.disabled) {
+      addButton.focus({ preventScroll: true });
+    }
+  });
+
+  const sectionsBody = SortableDiv(...sectionObjectArray.map(renderSection));
   const sections = AccordionItem(
     'Sections',  // buttonText
-    SortableDiv(...sectionObjectArray.map(renderSection)),
+    addButton,
+    sectionsBody,
     FormText(
       `Here, you may drag each section (as well as elements within each section) to sort them as shown in the resume output (some recruiters like resumes that are mirrors the job post description's structure). You may also use the checkboxes to include/exclude certain points from the resume as needed.`
     )
@@ -104,38 +195,60 @@ function renderSections(sectionObjectArray) {
 
 
 function renderSection(sectionObject) {
-  return Section(
-    sectionObject.title,                 // accordionButtonText
-    renderSectionContent(sectionObject)  // accordionBodyChildren
-  );
+  const addButton = SuccessButton(Plus(), NonBreakingSpace(), 'Entry');
+  addButton.addEventListener('click', () => {
+    if (sectionObject.type === 'certification') {
+      sectionContent.prepend(Certification());
+    } else if (sectionObject.type === 'default') {
+      sectionContent.prepend(DefaultEntry());
+    } else if (sectionObject.type === 'employment') {
+      sectionContent.prepend(Employment());
+    }
+  });
+
+  const sectionContent = renderSectionContent(sectionObject);
+  const section = (sectionObject.type === 'skill')
+    ? Section(sectionObject.title, sectionContent)
+    : Section(sectionObject.title, addButton, sectionContent);
+
+  section.classList.add(`section-${sectionObject.type}`);
+  return section;
 }
 
 
 function renderSectionContent(sectionObject) {
-  if (Object.hasOwn(sectionObject, 'cslist')) {
-    return renderCSV(sectionObject.cslist);
-  } else if (Object.hasOwn(sectionObject, 'entries')) {
+  if (sectionObject.type === 'skill') {
+    return renderCSV(sectionObject.entries);
+  } else if (sectionObject.type === 'certification') {
+    return renderCertifications(sectionObject.entries);
+  } else if (sectionObject.type === 'default') {
     return renderEntries(sectionObject.entries);
-  } else if (Object.hasOwn(sectionObject, 'certifications')) {
-    return renderCertifications(sectionObject.certifications);
+  } else if (sectionObject.type === 'employment') {
+    return renderEmployment(sectionObject.entries);
   }
 }
 
 
-function renderCSV(values) {
+function renderCSV(values = []) {
   return CommaSeparatedValues(...values);
 }
 
 
-function renderEntries(entryArray) {
+function renderCertifications(certificationArray = []) {
   return NestedSortableDiv(
-    ...entryArray.map(Entry)
+    ...certificationArray.map(Certification)
   );
 }
 
 
-function renderCertifications(certificationArray) {
+function renderEntries(entryArray = []) {
   return NestedSortableDiv(
-    ...certificationArray.map(Certification)
+    ...entryArray.map(DefaultEntry)
+  );
+}
+
+function renderEmployment(employmentArray = []) {
+  return NestedSortableDiv(
+    ...employmentArray.map(Employment)
   );
 }

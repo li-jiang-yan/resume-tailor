@@ -25,8 +25,12 @@ def similarity():
     """Computes the TF-IDF similarity of two texts in a given corpus list."""
     payload = request.get_json()
     corpus = payload["corpus"]
-    similarity = similaritylib.compute(corpus)
-    return jsonify({"percentage": similarity * 100}), 200
+    try:
+        similarity = similaritylib.compute(corpus)
+        result = similarity * 100
+    except Exception:  # noqa: BLE001
+        result = "-"
+    return jsonify({"percentage": result}), 200
 
 
 @bp.route("/word", methods=["POST"])

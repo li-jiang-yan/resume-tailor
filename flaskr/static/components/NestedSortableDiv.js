@@ -13,5 +13,6 @@ export function NestedSortableDiv(...children) {
     ghostClass: 'invisible'
   });
 
+  result.classList.add('nested-sorted');
   return result;
 }

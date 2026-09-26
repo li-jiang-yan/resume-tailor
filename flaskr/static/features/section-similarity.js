@@ -50,7 +50,11 @@ export async function calculateSimilarityBulletpoint(text, output) {
   const data = await response.json();
 
   // Present similarity in frontend
-  output.replaceChildren(`(${data.percentage.toFixed(1)}%)`);
+  if (data.percentage == '-') {
+    output.replaceChildren(`(-%)`);
+  } else {
+    output.replaceChildren(`(${data.percentage.toFixed(1)}%)`);
+  }
 }
 
 

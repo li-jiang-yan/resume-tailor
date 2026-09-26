@@ -1,3 +1,4 @@
+import { Bulletlist } from "./Bulletlist.js";
 import { CheckboxAccordion } from "./CheckboxAccordion.js";
 import { DangerButton } from "./DangerButton.js";
 import { Trash } from "./icons/Trash.js";
@@ -6,16 +7,17 @@ import { NonBreakingSpace } from "./NonBreakingSpace.js";
 
 
 const DEFAULT = {
-  name: '(Unnamed Certification)',
-  institution: '',
-  dates: ''
+  name: '(Unnamed Employment)',
+  dates: '',
+  company: '',
+  bulletlist: []
 };
 
 
-export function Certification(certificationObject = DEFAULT) {
-  const name = certificationObject.name;
-  const institution = certificationObject.institution;
-  const dates = certificationObject.dates;
+export function Employment(entryObject = DEFAULT) {
+  const name = entryObject.name;
+  const dates = entryObject.dates;
+  const company = entryObject.company;
 
   // Remove Button
   const removeButton = DangerButton(Trash(), NonBreakingSpace(), name);
@@ -31,12 +33,15 @@ export function Certification(certificationObject = DEFAULT) {
     removeButton.replaceChildren(Trash(), NonBreakingSpace(), event.target.value);
   });
 
-  // Institution and Date(s) Field
-  const institutionField = InlineField('Institution', 'text', institution);
-  const dateField = InlineField('Date(s)', 'text', dates);
+  // Dates, Company and Bulletlist Fields
+  const datesField = InlineField('Date(s)', 'text', dates);
+  const companyField = InlineField('Company', 'text', company);
+  const bulletlistField = Bulletlist(...entryObject.bulletlist);
 
   // Output
-  const result = CheckboxAccordion(name, removeButton, nameField, institutionField, dateField);
+  const result = CheckboxAccordion(
+    name, removeButton, nameField, companyField, datesField, bulletlistField
+  );
   result.classList.add('entry');
 
   return result;
