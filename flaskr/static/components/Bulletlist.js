@@ -8,7 +8,10 @@ import { InputGroup } from "./InputGroup.js";
 import { InputGroupText } from "./InputGroupText.js"
 import { Label } from "./Label.js";
 import { NestedSortableDiv } from "./NestedSortableDiv.js";
+import { NonBreakingSpace } from "./NonBreakingSpace.js";
+import { Plus } from "./icons/Plus.js";
 import { RowDiv } from "./RowDiv.js";
+import { SmallSuccessButton } from "./SmallSuccessButton.js";
 import { Textarea } from "./Textarea.js";
 
 
@@ -16,16 +19,19 @@ import { calculateSimilarityBulletpoint } from "../features/section-similarity.j
 
 
 export function Bulletlist(...values) {
-  const result = Div(
-    Label('Bulletlist'),
-    NestedSortableDiv(...values.map(Bulletpoint))
-  );
+  const addButton = SmallSuccessButton(Plus());
+  addButton.addEventListener('click', () => {
+    body.prepend(Bulletpoint());
+  });
+
+  const body = NestedSortableDiv(...values.map(Bulletpoint));
+  const result = Div(Label('Bulletlist'), NonBreakingSpace(), addButton, body);
   result.classList.add('bulletlist');
   return result;
 }
 
 
-function Bulletpoint(value) {
+function Bulletpoint(value = '') {
   // Checkbox
   const checkbox = Checkbox();
   checkbox.classList.add('col-auto', 'align-self-start', 'me-3', 'my-3');
