@@ -146,8 +146,22 @@ function renderSections(sectionObjectArray) {
   const modal = new bootstrap.Modal(modalElement);
 
   // Add Section: Event listeners
-  addButton.addEventListener('click', () => {
-    modal.show();
+  addButton.addEventListener('click', () => { modal.show(); });
+  Object.entries(selections).forEach(([key, value]) => {
+    value.button.setAttribute('data-bs-dismiss', 'modal');
+    value.button.addEventListener(
+      'click',
+      () => {
+        sectionsBody.prepend(
+          renderSection(
+            {
+              title: '(Untitled Section)',
+              type: key
+            }
+          )
+        );
+      }
+    );
   });
 
   // Add Section: Suppress aria-hidden warnings
@@ -215,25 +229,25 @@ function renderSectionContent(sectionObject) {
 }
 
 
-function renderCSV(values) {
+function renderCSV(values = []) {
   return CommaSeparatedValues(...values);
 }
 
 
-function renderCertifications(certificationArray) {
+function renderCertifications(certificationArray = []) {
   return NestedSortableDiv(
     ...certificationArray.map(Certification)
   );
 }
 
 
-function renderEntries(entryArray) {
+function renderEntries(entryArray = []) {
   return NestedSortableDiv(
     ...entryArray.map(DefaultEntry)
   );
 }
 
-function renderEmployment(employmentArray) {
+function renderEmployment(employmentArray = []) {
   return NestedSortableDiv(
     ...employmentArray.map(Employment)
   );
