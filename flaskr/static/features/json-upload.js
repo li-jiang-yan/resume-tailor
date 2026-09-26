@@ -8,7 +8,7 @@ import { CardTitle } from "../components/CardTitle.js";
 import { Certification } from "../components/Certification.js";
 import { CommaSeparatedValues } from "../components/CommaSeparatedValues.js";
 import { Div } from "../components/Div.js";
-import { Entry } from "../components/Entry.js";
+import { Employment } from "../components/Employment.js";
 import { FormText } from "../components/FormText.js";
 import { InlineField } from "../components/InlineField.js";
 import { Modal } from "../components/Modal.js";
@@ -19,6 +19,7 @@ import { NonBreakingSpace } from "../components/NonBreakingSpace.js";
 import { Plus } from "../components/icons/Plus.js";
 import { PrimaryButton } from "../components/PrimaryButton.js";
 import { Section } from "../components/Section.js";
+import { SimpleEntry } from "../components/SimpleEntry.js";
 import { SortableDiv } from "../components/SortableDiv.js";
 import { SuccessButton } from "../components/SuccessButton.js";
 
@@ -116,7 +117,7 @@ function renderSections(sectionObjectArray) {
       button: PrimaryButton('Certification Section'),
       description: 'Add a new certification section where certifications are separated by bulletpoints.'
     },
-    education: {
+    simpleEntry: {
       src: '../static/images/education_project.png',
       button: PrimaryButton('Education/Project Section'),
       description: 'Add a new education/project section where each education/project has a heading, date(s) and a bulletlist.'
@@ -188,12 +189,14 @@ function renderSection(sectionObject) {
 
 
 function renderSectionContent(sectionObject) {
-  if (Object.hasOwn(sectionObject, 'cslist')) {
+  if (sectionObject.type === 'skill') {
     return renderCSV(sectionObject.cslist);
-  } else if (Object.hasOwn(sectionObject, 'entries')) {
-    return renderEntries(sectionObject.entries);
-  } else if (Object.hasOwn(sectionObject, 'certifications')) {
+  } else if (sectionObject.type === 'certification') {
     return renderCertifications(sectionObject.certifications);
+  } else if (sectionObject.type === 'simpleEntry') {
+    return renderEntries(sectionObject.entries);
+  } else if (sectionObject.type === 'employment') {
+    return renderEmployment(sectionObject.entries);
   }
 }
 
@@ -203,15 +206,21 @@ function renderCSV(values) {
 }
 
 
-function renderEntries(entryArray) {
+function renderCertifications(certificationArray) {
   return NestedSortableDiv(
-    ...entryArray.map(Entry)
+    ...certificationArray.map(Certification)
   );
 }
 
 
-function renderCertifications(certificationArray) {
+function renderEntries(entryArray) {
   return NestedSortableDiv(
-    ...certificationArray.map(Certification)
+    ...entryArray.map(SimpleEntry)
+  );
+}
+
+function renderEmployment(employmentArray) {
+  return NestedSortableDiv(
+    ...employmentArray.map(Employment)
   );
 }

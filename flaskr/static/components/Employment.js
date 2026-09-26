@@ -6,8 +6,10 @@ import { InlineField } from "./InlineField.js";
 import { NonBreakingSpace } from "./NonBreakingSpace.js";
 
 
-export function Entry(entryObject) {
+export function Employment(entryObject) {
   const name = entryObject.name;
+  const dates = entryObject.dates;
+  const company = entryObject.company;
 
   // Remove Button
   const removeButton = DangerButton(Trash(), NonBreakingSpace(), name);
@@ -16,37 +18,23 @@ export function Entry(entryObject) {
     result.remove();
   });
 
-  // Fields
-  const entryFields = Object.entries(entryObject).map(
-    ([key, value]) => EntryField(key, value)
-  );
-
   // Name Field
-  const nameField = entryFields.find((child) => {
-    return child.querySelector('label').textContent.trim().toLowerCase() === 'name';
-  });
+  const nameField = InlineField('Name', 'text', name);
   nameField.querySelector('input').addEventListener('input', (event) => {
     result.querySelector('.accordion-button').textContent = event.target.value;
     removeButton.replaceChildren(Trash(), NonBreakingSpace(), event.target.value);
   });
 
+  // Dates, Company and Bulletlist Fields
+  const datesField = InlineField('Date(s)', 'text', dates);
+  const companyField = InlineField('Company', 'text', company);
+  const bulletlistField = Bulletlist(...entryObject.bulletlist);
+
   // Output
-  const result = CheckboxAccordion(name, removeButton, ...entryFields);
+  const result = CheckboxAccordion(
+    name, removeButton, nameField, companyField, datesField, bulletlistField
+  );
   result.classList.add('entry');
 
   return result;
-}
-
-
-function EntryField(key, value) {
-  if (key === 'bulletlist') {
-    return Bulletlist(...value);
-  } else {
-    return InlineField(titleCase(key), 'text', value);
-  }
-}
-
-
-function titleCase(str) {
-  return `${str.charAt(0).toUpperCase()}${str.slice(1)}`
 }
