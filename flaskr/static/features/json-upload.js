@@ -118,7 +118,7 @@ function renderSections(sectionObjectArray) {
     },
     education: {
       src: '../static/images/education_project.png',
-      button: PrimaryButton('Project Section'),
+      button: PrimaryButton('Education/Project Section'),
       description: 'Add a new education/project section where each education/project has a heading, date(s) and a bulletlist.'
     },
     employment: {
