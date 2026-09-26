@@ -54,7 +54,7 @@ function Bulletpoint(value = '') {
 
   // Input Group
   const inputGroup = InputGroup(
-    Textarea(value),
+    textArea,
     InputGroupText(countText),
     removeButton
   );
