@@ -1,0 +1,59 @@
+{
+  "header": {
+    "name": "",
+    "email": "",
+    "mobile": "",
+    "portfolio": "",
+    "linkedin": ""
+  },
+  "summary": "",
+  "sections": [
+    {
+      "title": "Skills",
+      "type": "skill",
+      "entries": [
+        "Skill #1",
+        "Skill #2",
+        "Skill #3"
+      ]
+    },
+    {
+      "title": "Certifications",
+      "type": "certification",
+      "entries": [
+        {
+          "name": "Certification #1",
+          "institution": "",
+          "dates": ""
+        }
+      ]
+    },
+    {
+      "title": "Education",
+      "type": "default",
+      "entries": [
+        {
+          "name": "Education #1",
+          "dates": "",
+          "bulletlist": [
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Employment",
+      "type": "employment",
+      "entries": [
+        {
+          "name": "Employment #1",
+          "company": "",
+          "dates": "",
+          "bulletlist": [
+            ""
+          ]
+        }
+      ]
+    }
+  ]
+}
