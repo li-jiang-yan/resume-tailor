@@ -20,7 +20,7 @@ export function CommaSeparatedValues(...values) {
     Label('Comma Separated Values'),
     NestedSortableDiv(...values.map(CommaSeparatedValue))
   );
-  result.classList.add('cslist');
+  result.classList.add('entries');
   return result;
 }
 
@@ -58,7 +58,7 @@ function CommaSeparatedValue(value) {
   const rowDiv = RowDiv(checkbox, inputGroup);
 
   // Result (Container Div)
-  const result = render('<div class="container csv"></div>');
+  const result = render('<div class="container entry"></div>');
   result.replaceChildren(rowDiv);
   return result;
 }

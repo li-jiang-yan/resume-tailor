@@ -7,6 +7,7 @@ import { CardImgTop } from "../components/CardImgTop.js";
 import { CardTitle } from "../components/CardTitle.js";
 import { Certification } from "../components/Certification.js";
 import { CommaSeparatedValues } from "../components/CommaSeparatedValues.js";
+import { DefaultEntry } from "../components/DefaultEntry.js";
 import { Div } from "../components/Div.js";
 import { Employment } from "../components/Employment.js";
 import { FormText } from "../components/FormText.js";
@@ -19,7 +20,6 @@ import { NonBreakingSpace } from "../components/NonBreakingSpace.js";
 import { Plus } from "../components/icons/Plus.js";
 import { PrimaryButton } from "../components/PrimaryButton.js";
 import { Section } from "../components/Section.js";
-import { SimpleEntry } from "../components/SimpleEntry.js";
 import { SortableDiv } from "../components/SortableDiv.js";
 import { SuccessButton } from "../components/SuccessButton.js";
 
@@ -117,8 +117,8 @@ function renderSections(sectionObjectArray) {
       button: PrimaryButton('Certification Section'),
       description: 'Add a new certification section where certifications are separated by bulletpoints.'
     },
-    simpleEntry: {
-      src: '../static/images/education_project.png',
+    default: {
+      src: '../static/images/default.png',
       button: PrimaryButton('Education/Project Section'),
       description: 'Add a new education/project section where each education/project has a heading, date(s) and a bulletlist.'
     },
@@ -181,19 +181,21 @@ function renderSections(sectionObjectArray) {
 
 
 function renderSection(sectionObject) {
-  return Section(
+  const section = Section(
     sectionObject.title,                 // accordionButtonText
     renderSectionContent(sectionObject)  // accordionBodyChildren
   );
+  section.classList.add(`section-${sectionObject.type}`);
+  return section;
 }
 
 
 function renderSectionContent(sectionObject) {
   if (sectionObject.type === 'skill') {
-    return renderCSV(sectionObject.cslist);
+    return renderCSV(sectionObject.entries);
   } else if (sectionObject.type === 'certification') {
-    return renderCertifications(sectionObject.certifications);
-  } else if (sectionObject.type === 'simpleEntry') {
+    return renderCertifications(sectionObject.entries);
+  } else if (sectionObject.type === 'default') {
     return renderEntries(sectionObject.entries);
   } else if (sectionObject.type === 'employment') {
     return renderEmployment(sectionObject.entries);
@@ -215,7 +217,7 @@ function renderCertifications(certificationArray) {
 
 function renderEntries(entryArray) {
   return NestedSortableDiv(
-    ...entryArray.map(SimpleEntry)
+    ...entryArray.map(DefaultEntry)
   );
 }
 

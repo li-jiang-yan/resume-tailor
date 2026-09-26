@@ -63,53 +63,16 @@ function createObject(all=true) {
 
 
 function parseHeader(header) {
+  const fields = header.querySelectorAll('.inline-field');
   return {
-    header: parseChildren(header, true)
+    header: {
+      name: fields[0].querySelector('input').value,
+      email: fields[1].querySelector('input').value,
+      mobile: fields[2].querySelector('input').value,
+      portfolio: fields[3].querySelector('input').value,
+      linkedin: fields[4].querySelector('input').value
+    }
   };
-}
-
-
-function parseChildren(parentElement, all) {
-  return Object.fromEntries(
-    Array.from([
-      ...parentElement.querySelectorAll('.inline-field'),
-      ...parentElement.querySelectorAll('.bulletlist')
-    ]).map(
-      (inputElement) => parseElement(inputElement, all)
-    )
-  );
-}
-
-
-function parseElement(inputElement, all) {
-  if (inputElement.classList.contains('inline-field')) {
-    const key = convertToKey(inputElement.querySelector('label').innerText);
-    const value = inputElement.querySelector('input').value;
-    return [key, value];
-  } else if (inputElement.classList.contains('bulletlist')) {
-    const key = 'bulletlist';
-    const value = Array.from(inputElement.querySelectorAll('.bulletpoint')).filter(
-      (bulletpointElement) => all ? true : isChecked(bulletpointElement)
-    ).map(parseBulletpoint);
-    return [key, value];
-  } else {
-    return null;
-  }
-}
-
-
-function convertToKey(str) {
-  return str.trim().toLowerCase();
-}
-
-
-function isChecked(rowElement) {
-  return rowElement.querySelector('.checkbox').checked;
-}
-
-
-function parseBulletpoint(bulletpointElement) {
-  return bulletpointElement.querySelector('textarea').value;
 }
 
 
@@ -121,51 +84,83 @@ function parseSummary(summaryElement) {
 
 
 function parseSections(sectionsElement, all) {
+  const sectionElements = Array.from(sectionsElement.querySelectorAll('.section'));
   return {
-    sections: Array.from(sectionsElement.querySelectorAll('.section')).filter(
-      (sectionElement) => all ? true : isChecked(sectionElement)
-    ).map(
-      (sectionElement) => parseSection(sectionElement, all)
-    )
+    sections: filter(sectionElements, all).map((sectionElement) => parseSection(sectionElement, all))
   };
+}
+
+
+function filter(elementArray, all) {
+  return elementArray.filter((element) => all ? true : isChecked(element));
+}
+
+
+function isChecked(rowElement) {
+  return rowElement.querySelector('.checkbox').checked;
 }
 
 
 function parseSection(sectionElement, all) {
   const result = {};
   const sectionTitle = sectionElement.querySelector('.section-title');
+  const entries = filter(Array.from(sectionElement.querySelectorAll('.entry')), all);
   result.title = sectionTitle.querySelector('input').value;
 
-  const entries = Array.from(sectionElement.querySelectorAll('.entry')).filter(
-    (entryElement) => all ? true : isChecked(entryElement)
-  ).map(
-    (entryElement) => parseEntry(entryElement, all)
-  );
-  if (entries.length !== 0) result.entries = entries;
-
-  const cslist = Array.from(sectionElement.querySelectorAll('.csv')).filter(
-    (csvElement) => all ? true : isChecked(csvElement)
-  ).map(
-    (csvElement) => parseCSV(csvElement)
-  );
-  if (cslist.length !== 0) result.cslist = cslist;
-
-  const certifications = Array.from(sectionElement.querySelectorAll('.certification')).filter(
-    (certificationElement) => all ? true : isChecked(certificationElement)
-  ).map(
-    (certificationElement) => parseEntry(certificationElement, all)
-  );
-  if (certifications.length !== 0) result.certifications = certifications;
+  if (sectionElement.classList.contains('section-skill')) {
+    result.type = 'skill';
+    result.entries = entries.map(parseCSV);
+  } else if (sectionElement.classList.contains('section-certification')) {
+    result.type = 'certification';
+    result.entries = entries.map(parseCertification);
+  } else if (sectionElement.classList.contains('section-default')) {
+    result.type = 'default';
+    result.entries = entries.map((entry) => parseEntry(entry, all));
+  } else if (sectionElement.classList.contains('section-employment')) {
+    result.type = 'employment';
+    result.entries = entries.map((entry) => parseEmployment(entry, all));
+  }
 
   return result;
 }
 
 
-function parseEntry(entryElement, all) {
-  return parseChildren(entryElement, all);
+function parseCSV(entry) {
+  return entry.querySelector('.input-text').value;
 }
 
 
-function parseCSV(csvElement) {
-  return csvElement.querySelector('.input-text').value;
+function parseCertification(entry) {
+  const fields = entry.querySelectorAll('.inline-field');
+  return {
+    'name': fields[0].querySelector('input').value,
+    'institution': fields[1].querySelector('input').value,
+    'dates': fields[2].querySelector('input').value
+  };
+}
+
+
+function parseEntry(entry, all) {
+  const fields = entry.querySelectorAll('.inline-field');
+  return {
+    'name': fields[0].querySelector('input').value,
+    'dates': fields[1].querySelector('input').value,
+    'bulletlist': filter(Array.from(entry.querySelectorAll('.bulletpoint')), all).map(parseBulletpoint)
+  };
+}
+
+
+function parseBulletpoint(bulletpointElement) {
+  return bulletpointElement.querySelector('textarea').value;
+}
+
+
+function parseEmployment(entry, all) {
+  const fields = entry.querySelectorAll('.inline-field');
+  return {
+    'name': fields[0].querySelector('input').value,
+    'company': fields[1].querySelector('input').value,
+    'dates': fields[2].querySelector('input').value,
+    'bulletlist': filter(Array.from(entry.querySelectorAll('.bulletpoint')), all).map(parseBulletpoint)
+  };
 }

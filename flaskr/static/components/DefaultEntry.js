@@ -6,7 +6,7 @@ import { InlineField } from "./InlineField.js";
 import { NonBreakingSpace } from "./NonBreakingSpace.js";
 
 
-export function SimpleEntry(entryObject) {
+export function DefaultEntry(entryObject) {
   const name = entryObject.name;
   const dates = entryObject.dates;
 

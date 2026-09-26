@@ -30,7 +30,7 @@ export function Certification(certificationObject) {
 
   // Output
   const result = CheckboxAccordion(name, removeButton, nameField, institutionField, dateField);
-  result.classList.add('certification');
+  result.classList.add('entry');
 
   return result;
 }
