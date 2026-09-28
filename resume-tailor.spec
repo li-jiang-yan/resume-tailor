@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['flaskr.py'],
+    ['app.py'],
     pathex=[],
     binaries=[],
     datas=[('flaskr/templates', 'flaskr/templates'), ('flaskr/static', 'flaskr/static')],
