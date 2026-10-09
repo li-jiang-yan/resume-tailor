@@ -64,7 +64,7 @@ function CommaSeparatedValue(value = '') {
   const rowDiv = RowDiv(checkbox, inputGroup);
 
   // Result (Container Div)
-  const result = render('<div class="container entry"></div>');
+  const result = render('<div class="container entry csv"></div>');
   result.replaceChildren(rowDiv);
   return result;
 }
